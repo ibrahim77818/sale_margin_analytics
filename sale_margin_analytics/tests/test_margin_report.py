@@ -52,26 +52,26 @@ class TestMarginReport(SaleMarginCommon):
         rows = self.env['sale.margin.report'].search([('order_id', 'in', (order | cancelled).ids)])
         self.assertEqual(rows.line_id, order.order_line.filtered(lambda l: not l.display_type))
 
-    def test_05_read_group_weights_ratios(self):
+    def test_05_formatted_read_group_weights_ratios(self):
         """Pivot cells must show revenue-weighted margin %, not an average of line %."""
         order = self._create_order([
             {'qty': 1, 'price': 100.0},                           # 40 %
             {'qty': 1, 'price': 300.0, 'product': self.service},  # 10 %
         ])
         self.env.flush_all()
-        res = self.env['sale.margin.report'].read_group(
-            [('order_id', '=', order.id)],
-            ['margin_percent:avg', 'cost_unit:avg', 'discount:avg'], ['order_id'])
+        res = self.env['sale.margin.report'].formatted_read_group(
+            [('order_id', '=', order.id)], groupby=['order_id'],
+            aggregates=['margin_percent:avg', 'cost_unit:avg', 'discount:avg'])
         self.assertEqual(len(res), 1)
-        self.assertAlmostEqual(res[0]['margin_percent'], 17.5, places=2)   # 70 / 400
-        self.assertAlmostEqual(res[0]['cost_unit'], 165.0, places=2)       # 330 / 2
-        self.assertAlmostEqual(res[0]['discount'], 0.0, places=2)
+        self.assertAlmostEqual(res[0]['margin_percent:avg'], 17.5, places=2)   # 70 / 400
+        self.assertAlmostEqual(res[0]['cost_unit:avg'], 165.0, places=2)       # 330 / 2
+        self.assertAlmostEqual(res[0]['discount:avg'], 0.0, places=2)
 
     def test_06_salesperson_sees_own_lines_only(self):
         rep = self.env['res.users'].create({
             'name': 'SMA Rep', 'login': 'sma_rep',
             'company_id': self.company.id, 'company_ids': [(6, 0, self.company.ids)],
-            'groups_id': [(6, 0, [
+            'group_ids': [(6, 0, [
                 self.env.ref('sales_team.group_sale_salesman').id,
                 self.env.ref('sale_margin_analytics.group_margin_analyst').id,
             ])],
@@ -87,7 +87,7 @@ class TestMarginReport(SaleMarginCommon):
         manager = self.env['res.users'].create({
             'name': 'SMA Manager', 'login': 'sma_manager',
             'company_id': self.company.id, 'company_ids': [(6, 0, self.company.ids)],
-            'groups_id': [(6, 0, [self.env.ref('sales_team.group_sale_manager').id])],
+            'group_ids': [(6, 0, [self.env.ref('sales_team.group_sale_manager').id])],
         })
         first = self._create_order([{'qty': 1, 'price': 100.0}])
         second = self._create_order([{'qty': 1, 'price': 100.0}])

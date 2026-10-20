@@ -10,7 +10,7 @@ class SaleOrder(models.Model):
     sma_margin = fields.Monetary(
         string='Margin', compute='_compute_sma_totals', store=True)
     sma_margin_percent = fields.Float(
-        string='Margin (%)', digits=(16, 2), group_operator='avg',
+        string='Margin (%)', digits=(16, 2), aggregator='avg',
         compute='_compute_sma_totals', store=True,
         help="Weighted order margin: total margin / total untaxed revenue x 100.")
 
@@ -31,6 +31,6 @@ class SaleOrder(models.Model):
         """Re-capture the standard-cost snapshot of lines not delivered yet."""
         lines = self.order_line.filtered(
             lambda l: not l.display_type and l.product_id
-            and float_is_zero(l.qty_delivered, precision_rounding=l.product_uom.rounding or 0.01))
+            and float_is_zero(l.qty_delivered, precision_rounding=l.product_uom_id.rounding or 0.01))
         lines._compute_sma_std_cost()
         return True

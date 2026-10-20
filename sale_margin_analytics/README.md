@@ -1,4 +1,4 @@
-# Sales Margin & Profitability Analytics (`sale_margin_analytics`) — Odoo 16
+# Sales Margin & Profitability Analytics (`sale_margin_analytics`) — Odoo 19
 
 ## Architecture
 
@@ -73,3 +73,19 @@ excluded lines, record rules, thresholds, payload totals per grouping, Excel and
 * Changing the company cost basis recomputes the stored cost fields of that company's lines
   (expected, can take a while on very large databases).
 * Margin band thresholds (0 / 10 / 30 %) are constants in the wizard (`margin_band`).
+
+## Porting notes 16.0 → 19.0
+* `attrs` → inline `invisible="…"`; `sale.order` state `done` removed (`locked` boolean).
+* Settings page uses the `<app>` / `<block>` / `<setting>` layout.
+* `<tree>` → `<list>`; `group_operator` → `aggregator`; storable products → `is_storable`.
+* `sale.order.line`: `product_uom` → `product_uom_id`, `tax_id` → `tax_ids`.
+* `groups_id` → `group_ids` (window-action binding, test users).
+* `stock.valuation.layer` removed: the valuation basis now reads `stock.move.value` of done
+  customer deliveries (minus customer returns). If `stock.move.value` is absent, lines fall back to
+  the standard snapshot instead of failing.
+* `read_group` → `formatted_read_group` override (weighted ratios, keys `field:agg`); the wizard
+  uses `_read_group`; `odoo.osv.expression` no longer used.
+* UoM rework: the SQL report no longer reads `uom_uom.factor`; the product-UoM quantity is the
+  stored line field `sma_product_qty`. The list no longer depends on `uom.group_uom`.
+* `_table_query` returns an `SQL` object; search-view `<group>` without `expand` / `string`.
+* Tests: `quantity` + `picked`, tax `country_id`, `price_include_override`, `formatted_read_group`.

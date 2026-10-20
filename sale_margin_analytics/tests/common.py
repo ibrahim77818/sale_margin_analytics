@@ -20,7 +20,8 @@ class SaleMarginCommon(TransactionCase):
         })
         cls.product = cls.env['product.product'].create({
             'name': 'SMA Widget',
-            'detailed_type': 'product',
+            'type': 'consu',
+            'is_storable': True,
             'categ_id': cls.categ.id,
             'standard_price': 60.0,
             'list_price': 100.0,
@@ -29,7 +30,7 @@ class SaleMarginCommon(TransactionCase):
         })
         cls.service = cls.env['product.product'].create({
             'name': 'SMA Installation',
-            'detailed_type': 'service',
+            'type': 'service',
             'categ_id': cls.categ.id,
             'standard_price': 270.0,
             'list_price': 300.0,
@@ -37,7 +38,12 @@ class SaleMarginCommon(TransactionCase):
         })
         cls.pricelist = cls.env['product.pricelist'].create({
             'name': 'SMA Pricelist', 'currency_id': cls.company_currency.id})
-        cls.tax_group = cls.env['account.tax.group'].create({'name': 'SMA VAT'})
+        # v17+: taxes carry a mandatory country that must match their tax group's.
+        cls.tax_country = cls.company.account_fiscal_country_id or cls.env.ref('base.us')
+        group_vals = {'name': 'SMA VAT', 'company_id': cls.company.id}
+        if 'country_id' in cls.env['account.tax.group']._fields:
+            group_vals['country_id'] = cls.tax_country.id
+        cls.tax_group = cls.env['account.tax.group'].create(group_vals)
 
     # ------------------------------------------------------------------ utils
     @classmethod
@@ -47,8 +53,10 @@ class SaleMarginCommon(TransactionCase):
             'amount': amount,
             'amount_type': 'percent',
             'type_tax_use': 'sale',
-            'price_include': price_include,
+            # v18: `price_include` is computed from this override.
+            'price_include_override': 'tax_included' if price_include else 'tax_excluded',
             'tax_group_id': cls.tax_group.id,
+            'country_id': cls.tax_country.id,
             'company_id': cls.company.id,
         })
 
@@ -68,10 +76,10 @@ class SaleMarginCommon(TransactionCase):
                 'product_uom_qty': line.get('qty', 1.0),
                 'price_unit': line['price'],
                 'discount': line.get('discount', 0.0),
-                'tax_id': [(6, 0, line.get('taxes', cls.env['account.tax']).ids)],
+                'tax_ids': [(6, 0, line.get('taxes', cls.env['account.tax']).ids)],
             }
             if line.get('uom'):
-                line_vals['product_uom'] = line['uom'].id
+                line_vals['product_uom_id'] = line['uom'].id
             vals['order_line'].append((0, 0, line_vals))
         order = cls.env['sale.order'].create(vals)
         if confirm:
@@ -89,7 +97,10 @@ class SaleMarginCommon(TransactionCase):
         picking = order.picking_ids.filtered(lambda p: p.state not in ('done', 'cancel'))
         self.assertEqual(len(picking), 1, "Expected exactly one open delivery")
         picking.action_assign()
-        picking.move_ids.quantity_done = qty
+        # v17+: `quantity_done` was replaced by `quantity` + the `picked` flag.
+        for move in picking.move_ids:
+            move.quantity = qty
+            move.picked = True
         res = picking.button_validate()
         if isinstance(res, dict) and res.get('res_model') == 'stock.backorder.confirmation':
             Form(self.env['stock.backorder.confirmation'].with_context(res['context'])).save().process()

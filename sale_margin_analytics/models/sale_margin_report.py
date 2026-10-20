@@ -1,4 +1,5 @@
 from odoo import api, fields, models
+from odoo.tools import SQL
 
 from .sale_order_line import COST_SOURCE_SELECTION
 
@@ -6,12 +7,11 @@ STATE_SELECTION = [
     ('draft', 'Quotation'),
     ('sent', 'Quotation Sent'),
     ('sale', 'Sales Order'),
-    ('done', 'Locked'),
     ('cancel', 'Cancelled'),
 ]
 
 # Ratio measures are meaningless when summed or averaged across lines.
-# read_group re-derives them from their summed components:
+# formatted_read_group re-derives them from their summed components:
 #   measure -> (numerator, denominator, factor)
 WEIGHTED_RATIOS = {
     'margin_percent': ('margin', 'price_subtotal', 100.0),
@@ -64,15 +64,15 @@ class SaleMarginReport(models.Model):
     qty_invoiced = fields.Float('Qty Invoiced (Line UoM)', readonly=True)
     product_qty = fields.Float('Qty Ordered (Product UoM)', readonly=True)
 
-    # --- Unit figures (weighted in read_group) -------------------------------
-    discount = fields.Float('Discount (%)', digits=(16, 2), group_operator='avg', readonly=True)
+    # --- Unit figures (weighted in formatted_read_group) -------------------------------
+    discount = fields.Float('Discount (%)', digits=(16, 2), aggregator='avg', readonly=True)
     price_unit = fields.Float('Unit Price (excl. tax)', digits='Product Price',
-                              group_operator='avg', readonly=True)
+                              aggregator='avg', readonly=True)
     price_unit_net = fields.Float('Net Unit Price', digits='Product Price',
-                                  group_operator='avg', readonly=True,
+                                  aggregator='avg', readonly=True,
                                   help="Unit price after discount, excluding taxes.")
     cost_unit = fields.Float('Unit Cost', digits='Product Price',
-                             group_operator='avg', readonly=True)
+                             aggregator='avg', readonly=True)
 
     # --- Amounts (company currency) ------------------------------------------
     gross_amount = fields.Monetary('Gross Amount', readonly=True,
@@ -83,18 +83,18 @@ class SaleMarginReport(models.Model):
     price_total = fields.Monetary('Total (Tax Incl.)', readonly=True)
     cost_total = fields.Monetary('Total Cost', readonly=True)
     margin = fields.Monetary('Margin', readonly=True)
-    margin_percent = fields.Float('Margin (%)', digits=(16, 2), group_operator='avg',
+    margin_percent = fields.Float('Margin (%)', digits=(16, 2), aggregator='avg',
                                   readonly=True)
     delivered_amount = fields.Monetary('Delivered Revenue', readonly=True)
     delivered_cost = fields.Monetary('Delivered Cost', readonly=True)
     delivered_margin = fields.Monetary('Delivered Margin', readonly=True)
     delivered_margin_percent = fields.Float('Delivered Margin (%)', digits=(16, 2),
-                                            group_operator='avg', readonly=True)
+                                            aggregator='avg', readonly=True)
 
     # ------------------------------------------------------------------------
     @property
     def _table_query(self):
-        return self._query()
+        return SQL(self._query())
 
     @api.model
     def _query(self):
@@ -116,16 +116,14 @@ class SaleMarginReport(models.Model):
                 l.product_id                                AS product_id,
                 pt.id                                       AS product_tmpl_id,
                 pt.categ_id                                 AS categ_id,
-                l.product_uom                               AS line_uom_id,
+                l.product_uom_id                            AS line_uom_id,
                 pt.uom_id                                   AS product_uom_id,
                 l.sma_cost_source                           AS cost_source,
 
                 l.product_uom_qty                           AS qty_ordered,
                 l.qty_delivered                             AS qty_delivered,
                 l.qty_invoiced                              AS qty_invoiced,
-                CASE WHEN COALESCE(line_uom.factor, 0) = 0 THEN l.product_uom_qty
-                     ELSE l.product_uom_qty / line_uom.factor * COALESCE(base_uom.factor, 1.0)
-                END                                         AS product_qty,
+                COALESCE(l.sma_product_qty, l.product_uom_qty) AS product_qty,
 
                 COALESCE(l.discount, 0)                     AS discount,
                 (CASE WHEN l.product_uom_qty <> 0 THEN g.gross / l.product_uom_qty
@@ -155,8 +153,6 @@ class SaleMarginReport(models.Model):
             JOIN res_partner partner    ON partner.id = s.partner_id
             JOIN product_product pp     ON pp.id = l.product_id
             JOIN product_template pt    ON pt.id = pp.product_tmpl_id
-            LEFT JOIN uom_uom line_uom  ON line_uom.id = l.product_uom
-            LEFT JOIN uom_uom base_uom  ON base_uom.id = pt.uom_id
             CROSS JOIN LATERAL (
                 SELECT CASE WHEN COALESCE(s.currency_rate, 0) = 0 THEN 1.0
                             ELSE s.currency_rate END AS rate
@@ -177,18 +173,26 @@ class SaleMarginReport(models.Model):
 
     # ------------------------------------------------------------------------
     @api.model
-    def read_group(self, domain, fields, groupby, offset=0, limit=None,
-                   orderby=False, lazy=True):
-        """Return *weighted* ratios (margin %, unit price, unit cost, discount %)
-        for each pivot / graph cell instead of a plain average of line ratios."""
-        requested = {spec.split(':')[0].strip() for spec in fields}
-        ratios = {name: spec for name, spec in WEIGHTED_RATIOS.items() if name in requested}
-        extra = {f for num, den, _factor in ratios.values() for f in (num, den)} - requested
-        result = super().read_group(
-            domain, list(fields) + sorted(extra), groupby,
-            offset=offset, limit=limit, orderby=orderby, lazy=lazy)
+    def formatted_read_group(self, domain, groupby=(), aggregates=(), having=(),
+                             offset=0, limit=None, order=None):
+        """v19 entry point of pivot / graph / grouped lists (replaces read_group).
+        Return *weighted* ratios (margin %, unit price, unit cost, discount %) in each
+        cell instead of a plain average of the line ratios."""
+        aggregates = list(aggregates)
+        ratios = {spec: WEIGHTED_RATIOS[spec.split(':')[0]] for spec in aggregates
+                  if spec.split(':')[0] in WEIGHTED_RATIOS}
+        extra = []
+        for num, den, _factor in ratios.values():
+            for name in (num, den):
+                spec = '%s:sum' % name
+                if spec not in aggregates and spec not in extra:
+                    extra.append(spec)
+        result = super().formatted_read_group(
+            domain, groupby=groupby, aggregates=aggregates + extra, having=having,
+            offset=offset, limit=limit, order=order)
         for row in result:
-            for name, (num, den, factor) in ratios.items():
-                denominator = row.get(den) or 0.0
-                row[name] = (row.get(num) or 0.0) / denominator * factor if denominator else 0.0
+            for spec, (num, den, factor) in ratios.items():
+                denominator = row.get('%s:sum' % den) or 0.0
+                numerator = row.get('%s:sum' % num) or 0.0
+                row[spec] = numerator / denominator * factor if denominator else 0.0
         return result

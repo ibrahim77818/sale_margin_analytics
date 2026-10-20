@@ -5,7 +5,6 @@ import pytz
 
 from odoo import _, api, fields, models
 from odoo.exceptions import UserError, ValidationError
-from odoo.osv import expression
 from odoo.tools.misc import format_date, format_datetime
 
 from ..report.margin_report_xlsx import MarginXlsxBuilder
@@ -129,7 +128,7 @@ class SaleMarginReportWizard(models.TransientModel):
             raise UserError(_("All selected sales orders must belong to %s.", self.company_id.name))
         domain = [('company_id', '=', self.company_id.id)]
         if self.state_scope == 'confirmed':
-            domain.append(('state', 'in', ('sale', 'done')))
+            domain.append(('state', '=', 'sale'))
         if self.date_from:
             domain.append(('date', '>=', self._to_utc(self.date_from, time.min)))
         if self.date_to:
@@ -153,11 +152,13 @@ class SaleMarginReportWizard(models.TransientModel):
         """Domain including order-level thresholds (weighted order margin %)."""
         domain = self._get_domain()
         if self.margin_filter_level == 'order' and (self.use_margin_min or self.use_margin_max):
-            groups = self.env['sale.margin.report'].read_group(
-                domain, ['price_subtotal', 'margin', 'margin_percent'], ['order_id'], lazy=False)
-            order_ids = [g['order_id'][0] for g in groups
-                         if g['order_id'] and self._within_threshold(g['margin_percent'])]
-            domain = expression.AND([domain, [('order_id', 'in', order_ids)]])
+            groups = self.env['sale.margin.report']._read_group(
+                domain, ['order_id'], ['price_subtotal:sum', 'margin:sum'])
+            order_ids = [
+                order.id for order, revenue, margin in groups
+                if order and self._within_threshold(margin / revenue * 100.0 if revenue else 0.0)
+            ]
+            domain = domain + [('order_id', 'in', order_ids)]
         return domain
 
     def _get_report_records(self):
@@ -382,8 +383,8 @@ class SaleMarginReportWizard(models.TransientModel):
             'type': 'ir.actions.act_window',
             'name': _('Margin Analysis'),
             'res_model': 'sale.margin.report',
-            'view_mode': 'pivot,graph,tree',
-            'views': [(False, 'pivot'), (False, 'graph'), (False, 'tree')],
+            'view_mode': 'pivot,graph,list',
+            'views': [(False, 'pivot'), (False, 'graph'), (False, 'list')],
             'search_view_id': [self.env.ref('sale_margin_analytics.sale_margin_report_view_search').id],
             'domain': self._get_effective_domain(),
             'context': {

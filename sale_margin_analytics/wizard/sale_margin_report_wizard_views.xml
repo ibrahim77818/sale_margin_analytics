@@ -43,15 +43,15 @@
                         <div class="o_row">
                             <field name="use_margin_min" nolabel="1"/>
                             <field name="margin_min" nolabel="1"
-                                   attrs="{'invisible': [('use_margin_min', '=', False)]}"/>
-                            <span attrs="{'invisible': [('use_margin_min', '=', False)]}">%</span>
+                                   invisible="not use_margin_min"/>
+                            <span invisible="not use_margin_min">%</span>
                         </div>
                         <label for="use_margin_max" string="Maximum Margin"/>
                         <div class="o_row">
                             <field name="use_margin_max" nolabel="1"/>
                             <field name="margin_max" nolabel="1"
-                                   attrs="{'invisible': [('use_margin_max', '=', False)]}"/>
-                            <span attrs="{'invisible': [('use_margin_max', '=', False)]}">%</span>
+                                   invisible="not use_margin_max"/>
+                            <span invisible="not use_margin_max">%</span>
                         </div>
                     </group>
                 </group>
@@ -83,6 +83,6 @@
         <field name="target">new</field>
         <field name="binding_model_id" ref="sale.model_sale_order"/>
         <field name="binding_view_types">list,form</field>
-        <field name="groups_id" eval="[(4, ref('group_margin_analyst'))]"/>
+        <field name="group_ids" eval="[(4, ref('group_margin_analyst'))]"/>
     </record>
 </odoo>

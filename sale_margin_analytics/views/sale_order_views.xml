@@ -5,27 +5,29 @@
         <field name="model">sale.order</field>
         <field name="inherit_id" ref="sale.view_order_form"/>
         <field name="arch" type="xml">
-            <xpath expr="//field[@name='order_line']/tree/field[@name='price_subtotal']" position="after">
+            <xpath expr="//field[@name='order_line']/list/field[@name='price_subtotal']" position="after">
                 <field name="sma_cost_unit" optional="show"
                        groups="sale_margin_analytics.group_margin_analyst"
-                       attrs="{'invisible': [('display_type', '!=', False)]}"/>
+                       invisible="display_type"/>
                 <field name="sma_cost_total" optional="hide" widget="monetary"
                        groups="sale_margin_analytics.group_margin_analyst"
-                       attrs="{'invisible': [('display_type', '!=', False)]}"/>
+                       invisible="display_type"/>
                 <field name="sma_margin" optional="show" widget="monetary"
                        groups="sale_margin_analytics.group_margin_analyst"
-                       attrs="{'invisible': [('display_type', '!=', False)]}"/>
+                       invisible="display_type"/>
                 <field name="sma_margin_percent" optional="show"
                        groups="sale_margin_analytics.group_margin_analyst"
                        decoration-danger="sma_margin_percent &lt; 0"
                        decoration-success="sma_margin_percent &gt;= 30"
-                       attrs="{'invisible': [('display_type', '!=', False)]}"/>
+                       invisible="display_type"/>
                 <field name="sma_cost_source" optional="hide"
                        groups="sale_margin_analytics.group_margin_analyst"/>
             </xpath>
             <xpath expr="//notebook" position="inside">
                 <page string="Profitability" name="sma_profitability"
                       groups="sale_margin_analytics.group_margin_analyst">
+                    <!-- v17+ requires fields used in modifiers to be in the view -->
+                    <field name="locked" invisible="1"/>
                     <group>
                         <group>
                             <field name="amount_untaxed" string="Revenue (Untaxed)"/>
@@ -41,7 +43,7 @@
                             <button name="action_sma_refresh_costs" type="object"
                                     string="Refresh Standard Costs" icon="fa-refresh"
                                     class="btn-secondary" colspan="2"
-                                    attrs="{'invisible': [('state', 'in', ('done', 'cancel'))]}"/>
+                                    invisible="state == 'cancel' or locked"/>
                         </group>
                     </group>
                 </page>
