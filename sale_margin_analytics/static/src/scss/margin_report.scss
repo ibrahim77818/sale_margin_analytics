@@ -1,0 +1,144 @@
+// Sales Margin & Profitability — PDF styles (wkhtmltopdf-safe: tables, no flexbox)
+
+$sma-ink: #0f172a;
+$sma-text: #1e293b;
+$sma-muted: #64748b;
+$sma-line: #e2e8f0;
+$sma-soft: #f8fafc;
+$sma-accent: #0d9488;
+$sma-accent-soft: #f0fdfa;
+
+$sma-neg: #b91c1c;   $sma-neg-bg: #fee2e2;
+$sma-low: #b45309;   $sma-low-bg: #fef3c7;
+$sma-mid: #1d4ed8;   $sma-mid-bg: #dbeafe;
+$sma-high: #047857;  $sma-high-bg: #d1fae5;
+
+.o_sma_header, .o_sma_report, .o_sma_footer {
+    font-family: 'Lato', 'Helvetica Neue', Arial, sans-serif;
+    color: $sma-text;
+    .r { text-align: right; }
+    .sma-muted { color: $sma-muted; }
+    .sma-small { font-size: 9px; }
+    .sma-strong { font-weight: bold; color: $sma-ink; }
+}
+
+// ---------------------------------------------------------------- header
+.o_sma_header {
+    .sma-head { width: 100%; border-collapse: collapse; border-bottom: 3px solid $sma-accent; }
+    .sma-head td { vertical-align: bottom; padding: 4px 4px 9px 4px; }
+    .sma-head-brand { width: 1%; padding-right: 14px !important; }
+    .sma-logo { max-height: 44px; max-width: 170px; }
+    .sma-eyebrow {
+        font-size: 9px; letter-spacing: 2px; text-transform: uppercase;
+        color: $sma-accent; font-weight: bold;
+    }
+    .sma-title { font-size: 21px; font-weight: bold; color: $sma-ink; line-height: 1.15; }
+    .sma-head-meta { text-align: right; font-size: 10px; line-height: 1.65; white-space: nowrap; }
+}
+
+// ---------------------------------------------------------------- body
+.o_sma_report {
+    font-size: 10px;
+
+    .sma-chips { margin: 2px 0 12px 0; }
+    .sma-chip {
+        display: inline-block; margin: 0 5px 5px 0; padding: 3px 9px;
+        background: $sma-soft; border: 1px solid $sma-line; border-radius: 11px;
+        font-size: 9px; color: $sma-text;
+    }
+    .sma-chip-k { color: $sma-muted; text-transform: uppercase; letter-spacing: .5px; font-size: 8px; }
+
+    // KPI cards
+    .sma-kpis { width: 100%; border-collapse: separate; border-spacing: 8px 0; margin: 0 -8px 14px -8px; }
+    .sma-kpis > tbody > tr > td, .sma-kpis > tr > td { width: 20%; vertical-align: top; padding: 0; }
+    .sma-kpi {
+        border: 1px solid $sma-line; border-top: 3px solid $sma-ink; border-radius: 6px;
+        padding: 9px 11px 8px 11px; background: #ffffff;
+    }
+    .sma-kpi-accent { border-top-color: $sma-accent; background: $sma-accent-soft; }
+    .sma-kpi-label { font-size: 8px; text-transform: uppercase; letter-spacing: 1px; color: $sma-muted; }
+    .sma-kpi-value { font-size: 17px; font-weight: bold; color: $sma-ink; margin: 3px 0 2px 0; white-space: nowrap; }
+    .sma-kpi-unit { font-size: 10px; font-weight: normal; color: $sma-muted; }
+    .sma-kpi-sub { font-size: 9px; color: $sma-muted; }
+    .sma-kpi-neg  { border-top-color: $sma-neg;  background: $sma-neg-bg;  .sma-kpi-value { color: $sma-neg; } }
+    .sma-kpi-low  { border-top-color: $sma-low;  background: $sma-low-bg;  .sma-kpi-value { color: $sma-low; } }
+    .sma-kpi-mid  { border-top-color: $sma-mid;  background: $sma-mid-bg;  .sma-kpi-value { color: $sma-mid; } }
+    .sma-kpi-high { border-top-color: $sma-high; background: $sma-high-bg; .sma-kpi-value { color: $sma-high; } }
+
+    .sma-section-title {
+        font-size: 12px; font-weight: bold; color: $sma-ink;
+        margin: 14px 0 6px 0; padding-bottom: 4px; border-bottom: 1px solid $sma-line;
+        span { font-weight: normal; font-size: 10px; }
+    }
+    .sma-page-break { page-break-before: always; margin-top: 0; }
+
+    // Health bar
+    .sma-bar { width: 100%; border-collapse: collapse; height: 16px; margin-bottom: 6px; }
+    .sma-bar td { color: #ffffff; font-size: 8px; font-weight: bold; text-align: center; padding: 2px 0; }
+    .sma-legend { width: 100%; border-collapse: collapse; margin-bottom: 4px; }
+    .sma-legend td { width: 25%; font-size: 9px; padding: 3px 6px 3px 0; vertical-align: top; }
+    .sma-dot { display: inline-block; width: 8px; height: 8px; border-radius: 4px; margin-right: 4px; }
+
+    .sma-bg-neg  { background-color: #ef4444; }
+    .sma-bg-low  { background-color: #f59e0b; }
+    .sma-bg-mid  { background-color: #3b82f6; }
+    .sma-bg-high { background-color: #10b981; }
+
+    // Data tables
+    .sma-table { width: 100%; border-collapse: collapse; margin-bottom: 8px; }
+    .sma-table thead { display: table-header-group; }
+    .sma-table tr { page-break-inside: avoid; }
+    .sma-table th {
+        background: $sma-ink; color: #ffffff; font-size: 8px; font-weight: bold;
+        text-transform: uppercase; letter-spacing: .6px; padding: 6px 6px; text-align: left;
+        border: none;
+    }
+    .sma-table th.r { text-align: right; }
+    .sma-table td { padding: 5px 6px; border-bottom: 1px solid $sma-line; vertical-align: middle; }
+    .sma-table tbody tr:nth-child(even) td { background: $sma-soft; }
+    .sma-total td, .sma-subtotal td { font-weight: bold; color: $sma-ink; }
+    .sma-total td { border-top: 2px solid $sma-ink; border-bottom: none; background: #ffffff; padding-top: 7px; }
+    .sma-subtotal td { background: $sma-accent-soft; border-top: 1px solid $sma-accent; border-bottom: none; }
+
+    .sma-share { height: 6px; background: $sma-line; border-radius: 3px; margin: 2px 0 2px 0; }
+    .sma-share-fill { height: 6px; border-radius: 3px; }
+
+    // Margin pills
+    .sma-pill {
+        display: inline-block; min-width: 46px; padding: 2px 7px; border-radius: 9px;
+        font-weight: bold; font-size: 9px; text-align: center; white-space: nowrap;
+    }
+    .sma-neg  { color: $sma-neg;  background: $sma-neg-bg; }
+    .sma-low  { color: $sma-low;  background: $sma-low-bg; }
+    .sma-mid  { color: $sma-mid;  background: $sma-mid-bg; }
+    .sma-high { color: $sma-high; background: $sma-high-bg; }
+
+    // Group blocks
+    .sma-group { margin-bottom: 12px; page-break-inside: auto; }
+    .sma-group-head {
+        width: 100%; border-collapse: collapse; border-left: 4px solid $sma-accent;
+        background: $sma-soft; margin-bottom: 0;
+    }
+    .sma-group-head td { padding: 7px 9px; font-size: 10px; }
+    .sma-group-name { font-size: 12px; font-weight: bold; color: $sma-ink; }
+    .sma-lines th { background: #334155; }
+
+    // Grand total
+    .sma-grand {
+        width: 100%; border-collapse: collapse; margin-top: 14px;
+        background: $sma-ink; color: #ffffff; border-radius: 6px; page-break-inside: avoid;
+    }
+    .sma-grand td { padding: 11px 13px; font-size: 13px; font-weight: bold; }
+    .sma-grand-label { font-size: 14px; }
+    .sma-grand-sub, .sma-grand-k {
+        font-size: 8px; font-weight: normal; text-transform: uppercase;
+        letter-spacing: 1px; color: #94a3b8;
+    }
+    .sma-note { margin-top: 10px; font-size: 8.5px; color: $sma-muted; }
+}
+
+// ---------------------------------------------------------------- footer
+.o_sma_footer {
+    .sma-foot { width: 100%; border-collapse: collapse; border-top: 1px solid $sma-line; }
+    .sma-foot td { font-size: 8.5px; color: $sma-muted; padding-top: 5px; }
+}

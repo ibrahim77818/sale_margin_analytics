@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="paperformat_margin_landscape" model="report.paperformat">
+        <field name="name">Margin Analytics (A4 Landscape)</field>
+        <field name="default" eval="False"/>
+        <field name="format">A4</field>
+        <field name="orientation">Landscape</field>
+        <field name="margin_top">30</field>
+        <field name="margin_bottom">16</field>
+        <field name="margin_left">9</field>
+        <field name="margin_right">9</field>
+        <field name="header_line" eval="False"/>
+        <field name="header_spacing">24</field>
+        <field name="dpi">90</field>
+    </record>
+
+    <record id="action_report_margin_pdf" model="ir.actions.report">
+        <field name="name">Sales Margin Report</field>
+        <field name="model">sale.margin.report.wizard</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">sale_margin_analytics.report_margin_document</field>
+        <field name="report_file">sale_margin_analytics.report_margin_document</field>
+        <field name="print_report_name">'Sales Margin Report - %s' % (object.company_id.name)</field>
+        <field name="paperformat_id" ref="paperformat_margin_landscape"/>
+    </record>
+</odoo>

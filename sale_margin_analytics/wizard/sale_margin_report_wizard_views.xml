@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="sale_margin_report_wizard_view_form" model="ir.ui.view">
+        <field name="name">sale.margin.report.wizard.form</field>
+        <field name="model">sale.margin.report.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Sales Margin Report">
+                <!-- Always present (no group restriction): used in the order_ids domain -->
+                <field name="company_id" invisible="1"/>
+                <group>
+                    <group string="Period &amp; Scope">
+                        <field name="date_from"/>
+                        <field name="date_to"/>
+                        <field name="state_scope" widget="radio"/>
+                        <field name="company_id" groups="base.group_multi_company"
+                               options="{'no_create': True}"/>
+                        <field name="currency_id" invisible="1"/>
+                    </group>
+                    <group string="Layout">
+                        <field name="group_by"/>
+                        <field name="include_lines"/>
+                    </group>
+                </group>
+                <group string="Filters">
+                    <group>
+                        <field name="partner_ids" widget="many2many_tags" options="{'no_create': True}"/>
+                        <field name="team_ids" widget="many2many_tags" options="{'no_create': True}"/>
+                        <field name="user_ids" widget="many2many_tags" options="{'no_create': True}"/>
+                    </group>
+                    <group>
+                        <field name="categ_ids" widget="many2many_tags" options="{'no_create': True}"/>
+                        <field name="product_ids" widget="many2many_tags" options="{'no_create': True}"/>
+                        <field name="order_ids" widget="many2many_tags" options="{'no_create': True}"
+                               domain="[('company_id', '=', company_id), ('state', '!=', 'cancel')]"/>
+                    </group>
+                </group>
+                <group string="Margin Thresholds">
+                    <group>
+                        <field name="margin_filter_level" widget="radio"/>
+                    </group>
+                    <group>
+                        <label for="use_margin_min" string="Minimum Margin"/>
+                        <div class="o_row">
+                            <field name="use_margin_min" nolabel="1"/>
+                            <field name="margin_min" nolabel="1"
+                                   attrs="{'invisible': [('use_margin_min', '=', False)]}"/>
+                            <span attrs="{'invisible': [('use_margin_min', '=', False)]}">%</span>
+                        </div>
+                        <label for="use_margin_max" string="Maximum Margin"/>
+                        <div class="o_row">
+                            <field name="use_margin_max" nolabel="1"/>
+                            <field name="margin_max" nolabel="1"
+                                   attrs="{'invisible': [('use_margin_max', '=', False)]}"/>
+                            <span attrs="{'invisible': [('use_margin_max', '=', False)]}">%</span>
+                        </div>
+                    </group>
+                </group>
+                <footer>
+                    <button name="action_print_pdf" string="Print PDF" type="object"
+                            class="btn-primary" icon="fa-file-pdf-o" data-hotkey="q"/>
+                    <button name="action_export_xlsx" string="Export Excel" type="object"
+                            class="btn-primary" icon="fa-file-excel-o" data-hotkey="w"/>
+                    <button name="action_open_analysis" string="Open Pivot Analysis" type="object"
+                            class="btn-secondary" icon="fa-table" data-hotkey="e"/>
+                    <button string="Cancel" special="cancel" class="btn-secondary" data-hotkey="z"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_sale_margin_report_wizard" model="ir.actions.act_window">
+        <field name="name">Sales Margin Report</field>
+        <field name="res_model">sale.margin.report.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+    <!-- "Action" menu on sales orders: report on the selected orders -->
+    <record id="action_sale_margin_report_wizard_orders" model="ir.actions.act_window">
+        <field name="name">Margin Report</field>
+        <field name="res_model">sale.margin.report.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+        <field name="binding_model_id" ref="sale.model_sale_order"/>
+        <field name="binding_view_types">list,form</field>
+        <field name="groups_id" eval="[(4, ref('group_margin_analyst'))]"/>
+    </record>
+</odoo>

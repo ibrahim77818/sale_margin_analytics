@@ -1,0 +1,278 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Margin % pill, coloured by health band -->
+    <template id="sma_pill">
+        <span t-attf-class="sma-pill sma-#{band}" t-out="fmt_pct(pct)"/>
+    </template>
+
+    <template id="report_margin_document">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="wiz">
+                <t t-set="p" t-value="payloads[wiz.id]"/>
+                <t t-set="currency" t-value="p['currency']"/>
+                <t t-set="company" t-value="p['company']"/>
+                <t t-set="k" t-value="p['totals']"/>
+                <t t-set="money" t-value="{'widget': 'monetary', 'display_currency': currency}"/>
+                <t t-set="price" t-value="{'widget': 'float', 'precision': p['price_digits']}"/>
+                <t t-set="qty" t-value="{'widget': 'float', 'precision': 2}"/>
+                <t t-set="show_order" t-value="p['group_by'] != 'order'"/>
+
+                <!-- ============ HEADER ============ -->
+                <div class="header o_sma_header">
+                    <table class="sma-head">
+                        <tr>
+                            <td class="sma-head-brand">
+                                <img t-if="company.logo" t-att-src="image_data_uri(company.logo)"
+                                     class="sma-logo" alt="Logo"/>
+                            </td>
+                            <td class="sma-head-title">
+                                <div class="sma-eyebrow" t-out="company.name"/>
+                                <div class="sma-title">Sales Margin &amp; Profitability</div>
+                            </td>
+                            <td class="sma-head-meta">
+                                <div><span class="sma-muted">Period</span>&#160;&#160;<b t-out="p['period_label']"/></div>
+                                <div><span class="sma-muted">Currency</span>&#160;&#160;<b t-out="currency.name"/></div>
+                                <div><span class="sma-muted">Cost basis</span>&#160;&#160;<b t-out="p['cost_basis']"/></div>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+
+                <!-- ============ BODY ============ -->
+                <div class="article o_sma_report" t-att-data-oe-model="wiz._name"
+                     t-att-data-oe-id="wiz.id" t-att-data-oe-lang="wiz.env.lang">
+
+                    <!-- Report parameters -->
+                    <div class="sma-chips">
+                        <t t-foreach="p['filters']" t-as="f">
+                            <span class="sma-chip"><span class="sma-chip-k" t-out="f[0]"/>&#160;<t t-out="f[1]"/></span>
+                        </t>
+                    </div>
+
+                    <!-- KPI cards -->
+                    <table class="sma-kpis">
+                        <tr>
+                            <td>
+                                <div class="sma-kpi">
+                                    <div class="sma-kpi-label">Revenue (untaxed)</div>
+                                    <div class="sma-kpi-value" t-out="k['subtotal']" t-options="money"/>
+                                    <div class="sma-kpi-sub">Taxes <t t-out="k['tax']" t-options="money"/></div>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="sma-kpi">
+                                    <div class="sma-kpi-label">Total cost</div>
+                                    <div class="sma-kpi-value" t-out="k['cost_total']" t-options="money"/>
+                                    <div class="sma-kpi-sub">Discounts granted <t t-out="k['discount_amount']" t-options="money"/></div>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="sma-kpi sma-kpi-accent">
+                                    <div class="sma-kpi-label">Gross margin</div>
+                                    <div class="sma-kpi-value" t-out="k['margin']" t-options="money"/>
+                                    <div class="sma-kpi-sub">Delivered <t t-out="k['delivered_margin']" t-options="money"/></div>
+                                </div>
+                            </td>
+                            <td>
+                                <div t-attf-class="sma-kpi sma-kpi-band sma-kpi-#{k['band']}">
+                                    <div class="sma-kpi-label">Margin rate</div>
+                                    <div class="sma-kpi-value" t-out="fmt_pct(k['margin_pct'])"/>
+                                    <div class="sma-kpi-sub">Weighted by revenue</div>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="sma-kpi">
+                                    <div class="sma-kpi-label">Volume</div>
+                                    <div class="sma-kpi-value"><t t-out="k['orders']"/> <span class="sma-kpi-unit">orders</span></div>
+                                    <div class="sma-kpi-sub"><t t-out="k['count']"/> order lines</div>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+
+                    <!-- Margin health -->
+                    <div class="sma-section-title">Margin health <span class="sma-muted">— share of revenue by margin band</span></div>
+                    <table class="sma-bar">
+                        <tr>
+                            <t t-foreach="p['bands']" t-as="b">
+                                <td t-if="b['share'] &gt; 0" t-attf-class="sma-bg-#{b['key']}"
+                                    t-attf-style="width: #{fmt_num(b['share'], 2)}%;">
+                                    <t t-if="b['share'] &gt;= 7" t-out="fmt_pct(b['share'], 0)"/>
+                                </td>
+                            </t>
+                        </tr>
+                    </table>
+                    <table class="sma-legend">
+                        <tr>
+                            <td t-foreach="p['bands']" t-as="b">
+                                <span t-attf-class="sma-dot sma-bg-#{b['key']}"/>
+                                <b t-out="b['label']"/><br/>
+                                <span class="sma-muted"><t t-out="b['count']"/> lines · <t t-out="b['revenue']" t-options="money"/></span>
+                            </td>
+                        </tr>
+                    </table>
+
+                    <!-- Ranking -->
+                    <div class="sma-section-title" t-out="p['summary_title']"/>
+                    <table class="sma-table">
+                        <thead>
+                            <tr>
+                                <th t-out="p['group_label']"/>
+                                <th class="r">Orders</th>
+                                <th class="r">Lines</th>
+                                <th class="r">Revenue</th>
+                                <th class="r">Cost</th>
+                                <th class="r">Margin</th>
+                                <th class="r">Margin %</th>
+                                <th style="width: 15%;">Margin contribution</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr t-foreach="p['ranking']" t-as="g">
+                                <t t-set="gt" t-value="g['totals']"/>
+                                <td>
+                                    <div class="sma-strong" t-out="g['name']"/>
+                                    <div t-if="g['meta']" class="sma-muted sma-small" t-out="g['meta']"/>
+                                </td>
+                                <td class="r" t-out="gt['orders']"/>
+                                <td class="r" t-out="gt['count']"/>
+                                <td class="r" t-out="gt['subtotal']" t-options="money"/>
+                                <td class="r" t-out="gt['cost_total']" t-options="money"/>
+                                <td class="r sma-strong" t-out="gt['margin']" t-options="money"/>
+                                <td class="r"><t t-call="sale_margin_analytics.sma_pill"><t t-set="band" t-value="gt['band']"/><t t-set="pct" t-value="gt['margin_pct']"/></t></td>
+                                <td>
+                                    <div class="sma-share"><div t-attf-class="sma-share-fill sma-bg-#{gt['band']}" t-attf-style="width: #{fmt_num(g['bar'], 1)}%;"/></div>
+                                    <div class="sma-small sma-muted" t-out="fmt_pct(g['share'], 1) + ' of margin'"/>
+                                </td>
+                            </tr>
+                        </tbody>
+                        <tfoot>
+                            <tr class="sma-total">
+                                <td>Total</td>
+                                <td class="r" t-out="k['orders']"/>
+                                <td class="r" t-out="k['count']"/>
+                                <td class="r" t-out="k['subtotal']" t-options="money"/>
+                                <td class="r" t-out="k['cost_total']" t-options="money"/>
+                                <td class="r" t-out="k['margin']" t-options="money"/>
+                                <td class="r" t-out="fmt_pct(k['margin_pct'])"/>
+                                <td/>
+                            </tr>
+                        </tfoot>
+                    </table>
+
+                    <!-- Line details -->
+                    <t t-if="wiz.include_lines">
+                        <div class="sma-section-title sma-page-break">Line details</div>
+                        <t t-foreach="p['groups']" t-as="g">
+                            <t t-set="gt" t-value="g['totals']"/>
+                            <div class="sma-group">
+                                <table class="sma-group-head">
+                                    <tr>
+                                        <td>
+                                            <span class="sma-group-name" t-out="g['name']"/>
+                                            <span t-if="g['meta']" class="sma-muted">&#160;&#160;<t t-out="g['meta']"/></span>
+                                        </td>
+                                        <td class="r">
+                                            <span class="sma-muted">Revenue</span>&#160;<b t-out="gt['subtotal']" t-options="money"/>
+                                            &#160;&#160;<span class="sma-muted">Margin</span>&#160;<b t-out="gt['margin']" t-options="money"/>
+                                            &#160;<t t-call="sale_margin_analytics.sma_pill"><t t-set="band" t-value="gt['band']"/><t t-set="pct" t-value="gt['margin_pct']"/></t>
+                                        </td>
+                                    </tr>
+                                </table>
+                                <table class="sma-table sma-lines">
+                                    <thead>
+                                        <tr>
+                                            <t t-if="show_order">
+                                                <th>Order</th>
+                                                <th>Customer</th>
+                                            </t>
+                                            <th>Product</th>
+                                            <th class="r">Qty</th>
+                                            <th t-if="not show_order" class="r">Unit price</th>
+                                            <th t-if="not show_order" class="r">Disc.</th>
+                                            <th class="r">Net price</th>
+                                            <th class="r">Unit cost</th>
+                                            <th class="r">Subtotal</th>
+                                            <th class="r">Total cost</th>
+                                            <th class="r">Margin</th>
+                                            <th class="r">Margin %</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr t-foreach="g['lines']" t-as="l">
+                                            <t t-if="show_order">
+                                                <td>
+                                                    <div class="sma-strong" t-out="l['order']"/>
+                                                    <div class="sma-small sma-muted" t-out="l['date_str']"/>
+                                                </td>
+                                                <td t-out="l['customer']"/>
+                                            </t>
+                                            <td>
+                                                <div t-out="l['product']"/>
+                                                <div t-if="l['cost_source_key'] in ('actual', 'mixed')"
+                                                     class="sma-small sma-muted" t-out="l['cost_source']"/>
+                                            </td>
+                                            <td class="r"><t t-out="l['qty']" t-options="qty"/> <span class="sma-muted" t-out="l['uom']"/></td>
+                                            <td t-if="not show_order" class="r" t-out="l['price_unit']" t-options="price"/>
+                                            <td t-if="not show_order" class="r">
+                                                <t t-if="l['discount']" t-out="fmt_pct(l['discount'])"/>
+                                                <span t-else="" class="sma-muted">—</span>
+                                            </td>
+                                            <td class="r" t-out="l['price_unit_net']" t-options="price"/>
+                                            <td class="r" t-out="l['cost_unit']" t-options="price"/>
+                                            <td class="r" t-out="l['subtotal']" t-options="money"/>
+                                            <td class="r" t-out="l['cost_total']" t-options="money"/>
+                                            <td class="r sma-strong" t-out="l['margin']" t-options="money"/>
+                                            <td class="r"><t t-call="sale_margin_analytics.sma_pill"><t t-set="band" t-value="l['band']"/><t t-set="pct" t-value="l['margin_pct']"/></t></td>
+                                        </tr>
+                                    </tbody>
+                                    <tfoot>
+                                        <tr class="sma-subtotal">
+                                            <td colspan="6">Subtotal · <t t-out="gt['count']"/> lines</td>
+                                            <td class="r" t-out="gt['subtotal']" t-options="money"/>
+                                            <td class="r" t-out="gt['cost_total']" t-options="money"/>
+                                            <td class="r" t-out="gt['margin']" t-options="money"/>
+                                            <td class="r" t-out="fmt_pct(gt['margin_pct'])"/>
+                                        </tr>
+                                    </tfoot>
+                                </table>
+                            </div>
+                        </t>
+                    </t>
+
+                    <!-- Grand total -->
+                    <table class="sma-grand">
+                        <tr>
+                            <td class="sma-grand-label">
+                                Grand total<br/>
+                                <span class="sma-grand-sub"><t t-out="k['orders']"/> orders · <t t-out="k['count']"/> lines</span>
+                            </td>
+                            <td class="r"><span class="sma-grand-k">Revenue</span><br/><t t-out="k['subtotal']" t-options="money"/></td>
+                            <td class="r"><span class="sma-grand-k">Taxes</span><br/><t t-out="k['tax']" t-options="money"/></td>
+                            <td class="r"><span class="sma-grand-k">Cost</span><br/><t t-out="k['cost_total']" t-options="money"/></td>
+                            <td class="r"><span class="sma-grand-k">Margin</span><br/><t t-out="k['margin']" t-options="money"/></td>
+                            <td class="r"><span class="sma-grand-k">Margin rate</span><br/><t t-out="fmt_pct(k['margin_pct'])"/></td>
+                        </tr>
+                    </table>
+
+                    <p class="sma-note">
+                        Margins are computed on untaxed amounts after line discounts and converted to
+                        <t t-out="currency.name"/> at each order's exchange rate. Unit prices and costs are
+                        expressed per order-line unit of measure. Down-payment, section and note lines
+                        are excluded.
+                    </p>
+                </div>
+
+                <!-- ============ FOOTER ============ -->
+                <div class="footer o_sma_footer">
+                    <table class="sma-foot">
+                        <tr>
+                            <td>Generated <t t-out="p['generated_on']"/> by <t t-out="p['generated_by']"/></td>
+                            <td class="r">Page <span class="page"/> of <span class="topage"/></td>
+                        </tr>
+                    </table>
+                </div>
+            </t>
+        </t>
+    </template>
+</odoo>

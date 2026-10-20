@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <menuitem id="menu_sale_margin_root"
+              name="Margin Analytics"
+              parent="sale.menu_sale_report"
+              sequence="20"
+              groups="group_margin_analyst"/>
+
+    <menuitem id="menu_sale_margin_analysis"
+              name="Margin Analysis"
+              parent="menu_sale_margin_root"
+              action="action_sale_margin_report"
+              sequence="10"/>
+
+    <menuitem id="menu_sale_margin_report_wizard"
+              name="Margin Report (PDF / Excel)"
+              parent="menu_sale_margin_root"
+              action="action_sale_margin_report_wizard"
+              sequence="20"/>
+</odoo>

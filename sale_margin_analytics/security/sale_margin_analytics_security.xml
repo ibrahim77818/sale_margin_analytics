@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="group_margin_analyst" model="res.groups">
+        <field name="name">Sales Margin Analytics</field>
+        <field name="comment">Can see product costs, margins and profitability reports on sales.</field>
+    </record>
+
+    <!-- Sales managers are analysts by default -->
+    <record id="sales_team.group_sale_manager" model="res.groups">
+        <field name="implied_ids" eval="[(4, ref('group_margin_analyst'))]"/>
+    </record>
+
+    <data noupdate="1">
+        <!-- Multi-company isolation (global rule) -->
+        <record id="rule_sale_margin_report_company" model="ir.rule">
+            <field name="name">Sales Margin Analysis: multi-company</field>
+            <field name="model_id" ref="model_sale_margin_report"/>
+            <field name="global" eval="True"/>
+            <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+        </record>
+
+        <!-- Salesperson (own documents) sees own / unassigned orders only -->
+        <record id="rule_sale_margin_report_own" model="ir.rule">
+            <field name="name">Sales Margin Analysis: own documents</field>
+            <field name="model_id" ref="model_sale_margin_report"/>
+            <field name="domain_force">['|', ('user_id', '=', user.id), ('user_id', '=', False)]</field>
+            <field name="groups" eval="[(4, ref('sales_team.group_sale_salesman'))]"/>
+        </record>
+
+        <!-- All documents (and managers through implication) see everything -->
+        <record id="rule_sale_margin_report_all" model="ir.rule">
+            <field name="name">Sales Margin Analysis: all documents</field>
+            <field name="model_id" ref="model_sale_margin_report"/>
+            <field name="domain_force">[(1, '=', 1)]</field>
+            <field name="groups" eval="[(4, ref('sales_team.group_sale_salesman_all_leads'))]"/>
+        </record>
+    </data>
+</odoo>

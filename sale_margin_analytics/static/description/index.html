@@ -1,0 +1,222 @@
+<!--
+  Odoo Apps description page for sale_margin_analytics (Odoo 16).
+  Inline styles only: apps.odoo.com strips <style> and <script> blocks.
+-->
+<section style="max-width:1120px;margin:0 auto;padding:0 16px;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;color:#2b2b33;">
+
+  <!-- ============================== HERO ============================== -->
+  <div style="background:linear-gradient(120deg,#017E84 0%,#3d6b78 45%,#714B67 100%);border-radius:18px;padding:48px 40px 40px;color:#ffffff;margin-top:12px;">
+    <div style="font-size:13px;letter-spacing:2px;text-transform:uppercase;opacity:.85;margin-bottom:10px;">Sales &middot; Inventory &middot; Reporting</div>
+    <h1 style="font-size:40px;line-height:1.15;font-weight:700;margin:0 0 14px;color:#ffffff;">Sales Margin Analytic</h1>
+    <p style="font-size:19px;line-height:1.55;max-width:760px;margin:0 0 24px;color:#ffffff;opacity:.95;">
+      Know what every sale really earns. Cost, margin and margin % are stored on each order line, analysed in pivot, graph and list views,
+      and delivered as a modern PDF and a multi-sheet Excel workbook, with the cost taken from the product or from the real inventory valuation.
+    </p>
+    <div>
+      <span style="display:inline-block;border:1px solid rgba(255,255,255,.7);border-radius:20px;padding:6px 14px;margin:0 8px 8px 0;font-size:14px;">Odoo 16.0</span><span style="display:inline-block;border:1px solid rgba(255,255,255,.7);border-radius:20px;padding:6px 14px;margin:0 8px 8px 0;font-size:14px;">Community &amp; Enterprise</span><span style="display:inline-block;border:1px solid rgba(255,255,255,.7);border-radius:20px;padding:6px 14px;margin:0 8px 8px 0;font-size:14px;">29 automated tests</span><span style="display:inline-block;border:1px solid rgba(255,255,255,.7);border-radius:20px;padding:6px 14px;margin:0 8px 8px 0;font-size:14px;">Technical name: sale_margin_analytics</span><span style="display:inline-block;border:1px solid rgba(255,255,255,.7);border-radius:20px;padding:6px 14px;margin:0 8px 8px 0;font-size:14px;">LGPL-3</span>
+    </div>
+  </div>
+
+  <!-- ============================== KEY NUMBERS ============================== -->
+  <div style="display:flex;flex-wrap:wrap;margin:28px -8px 8px;">
+    <div style="flex:1 1 220px;margin:8px;background:#f6f4f6;border-radius:14px;padding:20px 22px;"><div style="font-size:30px;font-weight:700;color:#714B67;">2 cost bases</div><div style="font-size:15px;color:#555;">Standard-cost snapshot or the actual FIFO / AVCO cost of delivered goods, chosen per company</div></div><div style="flex:1 1 220px;margin:8px;background:#eef6f6;border-radius:14px;padding:20px 22px;"><div style="font-size:30px;font-weight:700;color:#017E84;">4 margin bands</div><div style="font-size:15px;color:#555;">Loss-making, low, standard and high margin, used in filters, colours and reports</div></div><div style="flex:1 1 220px;margin:8px;background:#f6f4f6;border-radius:14px;padding:20px 22px;"><div style="font-size:30px;font-weight:700;color:#714B67;">3 outputs</div><div style="font-size:15px;color:#555;">Pivot / graph analysis, a one-click PDF and an Excel workbook with live formulas</div></div><div style="flex:1 1 220px;margin:8px;background:#eef6f6;border-radius:14px;padding:20px 22px;"><div style="font-size:30px;font-weight:700;color:#017E84;">0 N+1 queries</div><div style="font-size:15px;color:#555;">Costs are computed in batches and stored, so lists and reports stay fast on large databases</div></div>
+  </div>
+
+  <!-- ============================== PROBLEM / SOLUTION ============================== -->
+  <h2 style="font-size:28px;font-weight:700;margin:40px 0 6px;color:#2b2b33;">Why this module</h2>
+  <p style="font-size:16px;color:#555;margin:0 0 18px;">Odoo&rsquo;s standard margin (the <i>Margins</i> app) gives a quick estimate on the order. Finance and sales managers need more: a cost that follows what was really delivered, ratios that stay correct when grouped, and reports that can be sent to management as they are.</p>
+  <div style="display:flex;flex-wrap:wrap;margin:0 -10px;">
+    <div style="flex:1 1 440px;margin:10px;border:1px solid #f1d6d6;background:#fff8f8;border-radius:14px;padding:24px 26px;">
+      <h3 style="font-size:19px;font-weight:700;color:#b33939;margin:0 0 12px;">In standard Odoo 16</h3>
+      <ul style="font-size:15px;line-height:1.65;margin:0;padding-left:20px;color:#3a3a42;">
+        <li>Margin is an <b>optional extra app</b> that shows an amount and a percentage on the order and its lines.</li>
+        <li>The cost is the product&rsquo;s <b>standard price only</b>. It does not follow the <b>real FIFO / AVCO cost</b> of what was shipped, or the effect of returns.</li>
+        <li>A margin <b>percentage cannot be summed or averaged</b> across lines, so grouped views easily show a misleading rate.</li>
+        <li>There is <b>no quick way to isolate</b> loss-making or low-margin lines, or to apply a minimum or maximum margin to a report.</li>
+        <li>Management reporting means <b>exporting a pivot</b> and formatting totals, charts and rankings by hand every time.</li>
+        <li>Cost and margin <b>visibility is not a dedicated right</b> you can give to analysts and keep from the rest of the sales team.</li>
+      </ul>
+    </div>
+    <div style="flex:1 1 440px;margin:10px;border:1px solid #cfe7e7;background:#f4fbfb;border-radius:14px;padding:24px 26px;">
+      <h3 style="font-size:19px;font-weight:700;color:#017E84;margin:0 0 12px;">With this module</h3>
+      <ul style="font-size:15px;line-height:1.65;margin:0;padding-left:20px;color:#3a3a42;">
+        <li>Stored <b>cost, margin and margin %</b> on every order line and on the order, with a <b>Profitability</b> tab.</li>
+        <li>A company setting picks the <b>cost basis</b>: a frozen standard-cost snapshot, or the <b>actual valuation cost</b> of delivered goods (returns net out) with open quantities at the snapshot.</li>
+        <li>An analytical model in <b>company currency</b> where every pivot and graph cell shows a <b>revenue-weighted</b> margin %, unit price and unit cost.</li>
+        <li>Ready-made filters: <b>Loss-Making, Low, Standard and High margin</b>, discounted lines and actual-cost lines, plus group by customer, team, salesperson, category, product or cost basis.</li>
+        <li>A <b>report wizard</b> with period, scope, six filters and <b>min / max margin</b> at line or order level, producing a <b>PDF</b> and an <b>Excel</b> workbook in one click.</li>
+        <li>A dedicated <b>Sales Margin Analytics</b> group controls costs, menus and reports, with company and own-document record rules.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ============================== HOW IT FLOWS ============================== -->
+  <h2 style="font-size:28px;font-weight:700;margin:44px 0 16px;color:#2b2b33;">How it works</h2>
+  <div style="display:flex;flex-wrap:wrap;margin:0 -8px;">
+    <div style="flex:1 1 200px;margin:8px;border-radius:12px;border:1px solid #e3dde2;padding:18px;"><div style="width:34px;height:34px;border-radius:50%;background:#714B67;color:#fff;font-weight:700;text-align:center;line-height:34px;margin-bottom:10px;">1</div><div style="font-weight:700;margin-bottom:4px;">Sell</div><div style="font-size:14px;color:#555;">Quote and confirm as usual. Each line captures the product cost and shows its margin right away.</div></div><div style="flex:1 1 200px;margin:8px;border-radius:12px;border:1px solid #e3dde2;padding:18px;"><div style="width:34px;height:34px;border-radius:50%;background:#714B67;color:#fff;font-weight:700;text-align:center;line-height:34px;margin-bottom:10px;">2</div><div style="font-weight:700;margin-bottom:4px;">Deliver</div><div style="font-size:14px;color:#555;">In valuation mode, delivered quantities switch to the real cost booked in the stock valuation layers.</div></div><div style="flex:1 1 200px;margin:8px;border-radius:12px;border:1px solid #e3dde2;padding:18px;"><div style="width:34px;height:34px;border-radius:50%;background:#714B67;color:#fff;font-weight:700;text-align:center;line-height:34px;margin-bottom:10px;">3</div><div style="font-weight:700;margin-bottom:4px;">Analyse</div><div style="font-size:14px;color:#555;">Open <b>Margin Analysis</b> and slice by month, team, customer, product or margin band.</div></div><div style="flex:1 1 200px;margin:8px;border-radius:12px;border:1px solid #cfe7e7;background:#f4fbfb;padding:18px;"><div style="width:34px;height:34px;border-radius:50%;background:#017E84;color:#fff;font-weight:700;text-align:center;line-height:34px;margin-bottom:10px;">4</div><div style="font-weight:700;margin-bottom:4px;">Report</div><div style="font-size:14px;color:#555;">Set filters and thresholds in the wizard, then print the <b>PDF</b> or export the <b>Excel</b> file.</div></div>
+  </div>
+
+  <!-- ============================== FEATURES ============================== -->
+  <h2 style="font-size:28px;font-weight:700;margin:48px 0 6px;color:#2b2b33;">Features</h2>
+  <p style="font-size:16px;color:#555;margin:0 0 8px;">All screenshots use demo data: 15 confirmed sales orders with 51 lines and one quotation, a US-dollar company with some orders in euros, and the Inventory Valuation cost basis. Order S00015 is partly delivered and shows every margin band.</p>
+  <div style="margin:34px 0 0;">
+    <div style="font-size:13px;font-weight:700;color:#017E84;letter-spacing:1px;text-transform:uppercase;">Menus</div>
+    <h3 style="font-size:23px;font-weight:700;margin:4px 0 8px;">Find it under Sales &rsaquo; Reporting</h3>
+    <p style="font-size:15px;line-height:1.6;color:#555;margin:0 0 14px;">Two entries are added under <b>Sales &rsaquo; Reporting &rsaquo; Margin Analytics</b>: <b>Margin Analysis</b> (pivot, graph and list) and <b>Margin Report (PDF / Excel)</b>. Both are visible to the <b>Sales Margin Analytics</b> group only.</p>
+    <img src="sma_01_menu.png" alt="Margin Analytics menu under Sales Reporting" style="width:100%;max-width:1000px;border:1px solid #e1e1e6;border-radius:10px;box-shadow:0 6px 24px rgba(30,30,60,.10);"/>
+  </div>
+  <div style="margin:44px 0 0;">
+    <div style="font-size:13px;font-weight:700;color:#017E84;letter-spacing:1px;text-transform:uppercase;">Feature 1</div>
+    <h3 style="font-size:23px;font-weight:700;margin:4px 0 8px;">Cost, margin and margin % on every order line</h3>
+    <p style="font-size:15px;line-height:1.6;color:#555;margin:0 0 14px;">Each line shows <b>Unit Cost</b>, <b>Margin</b> and <b>Margin (%)</b> next to the subtotal, in the order currency. Margin is the <b>untaxed subtotal after discount minus cost</b>, so taxes never distort it. The rate turns <b>red when negative</b> and <b>green from 30%</b>. Sections, notes and down-payment lines are left out.</p>
+    <img src="sma_02_order_lines.png" alt="Sale order lines with unit cost, margin and margin percent" style="width:100%;border:1px solid #e1e1e6;border-radius:10px;box-shadow:0 6px 24px rgba(30,30,60,.10);"/>
+  </div>
+  <div style="margin:44px 0 0;">
+    <div style="font-size:13px;font-weight:700;color:#017E84;letter-spacing:1px;text-transform:uppercase;">Feature 2</div>
+    <h3 style="font-size:23px;font-weight:700;margin:4px 0 8px;">Optional columns: total cost and cost basis</h3>
+    <p style="font-size:15px;line-height:1.6;color:#555;margin:0 0 14px;">Use the column selector to add <b>Total Cost</b> and <b>Cost Basis</b>. The basis tells you how each line was costed: <b>Standard Cost</b>, <b>Actual + Standard</b> (delivered part at actual cost, open part at the snapshot) or <b>Actual (Valuation)</b>.</p>
+    <img src="sma_03_optional_columns.png" alt="Optional columns on the order lines" style="width:100%;max-width:1000px;border:1px solid #e1e1e6;border-radius:10px;box-shadow:0 6px 24px rgba(30,30,60,.10);"/>
+  </div>
+  <div style="margin:44px 0 0;">
+    <div style="font-size:13px;font-weight:700;color:#017E84;letter-spacing:1px;text-transform:uppercase;">Feature 3</div>
+    <h3 style="font-size:23px;font-weight:700;margin:4px 0 8px;">Profitability tab on the order</h3>
+    <p style="font-size:15px;line-height:1.6;color:#555;margin:0 0 14px;">Revenue (untaxed), total cost, margin and a <b>weighted margin %</b> for the whole order (total margin divided by total untaxed revenue). <b>Refresh Standard Costs</b> re-captures the product cost for lines that are not delivered yet, and is hidden on locked or cancelled orders.</p>
+    <img src="sma_04_profitability_tab.png" alt="Profitability tab with refresh button" style="width:100%;border:1px solid #e1e1e6;border-radius:10px;box-shadow:0 6px 24px rgba(30,30,60,.10);"/>
+  </div>
+  <div style="margin:44px 0 0;">
+    <div style="font-size:13px;font-weight:700;color:#017E84;letter-spacing:1px;text-transform:uppercase;">Feature 4</div>
+    <h3 style="font-size:23px;font-weight:700;margin:4px 0 8px;">Margin in the order list</h3>
+    <p style="font-size:15px;line-height:1.6;color:#555;margin:0 0 14px;">Add <b>Margin</b> (with a total) and <b>Margin (%)</b> to the Sales Orders list (and to Quotations) to rank orders at a glance.</p>
+    <img src="sma_05_order_list.png" alt="Sales order list with margin columns" style="width:100%;border:1px solid #e1e1e6;border-radius:10px;box-shadow:0 6px 24px rgba(30,30,60,.10);"/>
+  </div>
+  <div style="margin:44px 0 0;">
+    <div style="font-size:13px;font-weight:700;color:#017E84;letter-spacing:1px;text-transform:uppercase;">Feature 5</div>
+    <h3 style="font-size:23px;font-weight:700;margin:4px 0 8px;">Choose the cost basis per company</h3>
+    <p style="font-size:15px;line-height:1.6;color:#555;margin:0 0 14px;">In <b>Sales &rsaquo; Settings &rsaquo; Margin Analytics</b> pick <b>Standard Cost</b> (snapshot at order time) or <b>Inventory Valuation</b> (delivered quantities at the real FIFO / AVCO cost, returns netted, open quantities at the snapshot). The snapshot is frozen when the product is chosen, so later cost changes never rewrite the margin of past orders.</p>
+    <img src="sma_06_settings.png" alt="Margin cost basis setting" style="width:100%;max-width:1000px;border:1px solid #e1e1e6;border-radius:10px;box-shadow:0 6px 24px rgba(30,30,60,.10);"/>
+    <div style="font-size:15px;line-height:1.6;color:#555;margin:22px 0 10px;">Same lines of order S00015, costed on each basis:</div>
+    <table style="width:100%;border-collapse:collapse;font-size:15px;">
+      <thead><tr style="background:#714B67;color:#fff;"><th style="text-align:left;padding:10px 14px;">Line</th><th style="text-align:left;padding:10px 14px;">Costed as</th><th style="text-align:right;padding:10px 14px;">Standard basis</th><th style="text-align:right;padding:10px 14px;">Valuation basis</th></tr></thead>
+      <tbody><tr style="border-bottom:1px solid #eee;"><td style="padding:10px 14px;"><b>Executive Chair</b><br/><span style="font-size:13px;color:#777;">6 ordered, 6 delivered</span></td><td style="padding:10px 14px;">Actual (Valuation)</td><td style="padding:10px 14px;"><div style="text-align:right;">$&nbsp;417.60 &middot; 27.88%</div></td><td style="padding:10px 14px;"><div style="text-align:right;"><b>$&nbsp;369.60 &middot; 24.68%</b></div></td></tr><tr style="border-bottom:1px solid #eee;background:#fafafa;"><td style="padding:10px 14px;"><b>Standing Desk</b><br/><span style="font-size:13px;color:#777;">5 ordered, 3 delivered</span></td><td style="padding:10px 14px;">Actual + Standard</td><td style="padding:10px 14px;"><div style="text-align:right;">$&nbsp;1,050.00 &middot; 40.38%</div></td><td style="padding:10px 14px;"><div style="text-align:right;"><b>$&nbsp;1,052.70 &middot; 40.49%</b></div></td></tr><tr style="border-bottom:1px solid #eee;"><td style="padding:10px 14px;"><b>Filing Cabinet</b><br/><span style="font-size:13px;color:#777;">10 ordered, 0 delivered</span></td><td style="padding:10px 14px;">Standard Cost</td><td style="padding:10px 14px;"><div style="text-align:right;">$&nbsp;238.00 &middot; 21.88%</div></td><td style="padding:10px 14px;"><div style="text-align:right;"><b>$&nbsp;238.00 &middot; 21.88%</b></div></td></tr></tbody>
+    </table>
+    <div style="background:#f4fbfb;border-left:4px solid #017E84;border-radius:8px;padding:16px 20px;font-size:15px;line-height:1.6;margin-top:14px;">
+      <b>Mixed line:</b> unit cost = (actual cost of delivered + snapshot &times; remaining) &divide; ordered quantity.<br/>
+      Standing Desk: (3 &times; $&nbsp;309.10 + 2 &times; $&nbsp;310.00) &divide; 5 = <b>$&nbsp;309.46</b> per unit.
+      Changing the basis recomputes the stored costs of that company&rsquo;s lines.
+    </div>
+  </div>
+  <div style="margin:44px 0 0;">
+    <div style="font-size:13px;font-weight:700;color:#017E84;letter-spacing:1px;text-transform:uppercase;">Feature 6</div>
+    <h3 style="font-size:23px;font-weight:700;margin:4px 0 8px;">Pivot analysis with weighted ratios</h3>
+    <p style="font-size:15px;line-height:1.6;color:#555;margin:0 0 14px;">Rows by month and columns by sales team by default, with <b>Revenue (Untaxed)</b>, <b>Total Cost</b>, <b>Margin</b> and <b>Margin (%)</b>. Margin %, discount %, unit price and unit cost are <b>recomputed from their totals in every cell</b>, never averaged, so Total rows are always right. All amounts are in the company currency, converted at each order&rsquo;s own rate. Cancelled orders, sections, notes and down payments are excluded.</p>
+    <img src="sma_07_pivot.png" alt="Margin analysis pivot" style="width:100%;border:1px solid #e1e1e6;border-radius:10px;box-shadow:0 6px 24px rgba(30,30,60,.10);"/>
+  </div>
+  <div style="margin:44px 0 0;">
+    <div style="font-size:13px;font-weight:700;color:#017E84;letter-spacing:1px;text-transform:uppercase;">Feature 7</div>
+    <h3 style="font-size:23px;font-weight:700;margin:4px 0 8px;">Graph view</h3>
+    <p style="font-size:15px;line-height:1.6;color:#555;margin:0 0 14px;">The same data as a bar chart (margin by month by default). Change the measure, the grouping or the chart type like in any Odoo report.</p>
+    <img src="sma_08_graph.png" alt="Margin analysis graph" style="width:100%;max-width:1000px;border:1px solid #e1e1e6;border-radius:10px;box-shadow:0 6px 24px rgba(30,30,60,.10);"/>
+  </div>
+  <div style="margin:44px 0 0;">
+    <div style="font-size:13px;font-weight:700;color:#017E84;letter-spacing:1px;text-transform:uppercase;">Feature 8</div>
+    <h3 style="font-size:23px;font-weight:700;margin:4px 0 8px;">Line-level list with margin colours</h3>
+    <p style="font-size:15px;line-height:1.6;color:#555;margin:0 0 14px;">One row per order line with unit price, discount, unit cost, revenue, cost, margin and margin %. Rows are coloured by band: <b>red below 0%</b>, <b>orange from 0% to 10%</b>, <b>green from 30%</b>. Totals are shown in the footer. Extra columns (team, category, taxes, delivered quantity, delivered margin, cost basis, order currency) can be added from the selector.</p>
+    <img src="sma_09_list_view.png" alt="Margin analysis list view" style="width:100%;border:1px solid #e1e1e6;border-radius:10px;box-shadow:0 6px 24px rgba(30,30,60,.10);"/>
+  </div>
+  <div style="margin:44px 0 0;">
+    <div style="font-size:13px;font-weight:700;color:#017E84;letter-spacing:1px;text-transform:uppercase;">Feature 9</div>
+    <h3 style="font-size:23px;font-weight:700;margin:4px 0 8px;">Filters and groupings built for margin work</h3>
+    <p style="font-size:15px;line-height:1.6;color:#555;margin:0 0 14px;">Filter by <b>Loss-Making (&lt; 0%)</b>, <b>Low Margin (0&ndash;10%)</b>, <b>Standard Margin (10&ndash;30%)</b>, <b>High Margin (&ge; 30%)</b>, <b>Discounted Lines</b> or <b>Actual Cost (Valuation)</b>, on confirmed orders or quotations. Group by customer, team, salesperson, product category, product, order, cost basis or order date. Searching a category includes its sub-categories.</p>
+    <img src="sma_10_filters_open.png" alt="Filter and group by menu" style="width:100%;border:1px solid #e1e1e6;border-radius:10px;box-shadow:0 6px 24px rgba(30,30,60,.10);margin-bottom:22px;"/>
+    <img src="sma_11_filtered_result.png" alt="Loss-making and low-margin lines" style="width:100%;border:1px solid #e1e1e6;border-radius:10px;box-shadow:0 6px 24px rgba(30,30,60,.10);"/><div style="font-size:13px;color:#777;margin:6px 0 22px;">Loss-making or low-margin lines: 5 of 51. Note the Floor Lamp sold at a 15% discount below its cost.</div>
+  </div>
+  <div style="margin:44px 0 0;">
+    <div style="font-size:13px;font-weight:700;color:#017E84;letter-spacing:1px;text-transform:uppercase;">Feature 10</div>
+    <h3 style="font-size:23px;font-weight:700;margin:4px 0 8px;">Report wizard</h3>
+    <p style="font-size:15px;line-height:1.6;color:#555;margin:0 0 14px;">Choose the <b>period</b> (in your time zone), the <b>scope</b> (confirmed orders, or quotations and orders), the <b>grouping</b> (order, customer, salesperson, team, category or product) and whether to print line details. Narrow the data by <b>customers, teams, salespersons, categories, products and orders</b>.</p>
+    <img src="sma_12_wizard.png" alt="Sales margin report wizard" style="width:100%;max-width:1000px;border:1px solid #e1e1e6;border-radius:10px;box-shadow:0 6px 24px rgba(30,30,60,.10);"/>
+  </div>
+  <div style="margin:44px 0 0;">
+    <div style="font-size:13px;font-weight:700;color:#017E84;letter-spacing:1px;text-transform:uppercase;">Feature 11</div>
+    <h3 style="font-size:23px;font-weight:700;margin:4px 0 8px;">Margin thresholds at line or order level</h3>
+    <p style="font-size:15px;line-height:1.6;color:#555;margin:0 0 14px;">Tick <b>Minimum Margin</b> and / or <b>Maximum Margin</b> and decide whether the rule applies to each <b>order line</b> or to the <b>weighted margin of the whole order</b>. The wizard blocks an end date before the start date and a minimum above the maximum, and tells you when nothing matches. <b>Open Pivot Analysis</b> opens the same selection in the analysis views.</p>
+    <img src="sma_13_wizard_filters.png" alt="Wizard with filters and a minimum margin" style="width:100%;max-width:1000px;border:1px solid #e1e1e6;border-radius:10px;box-shadow:0 6px 24px rgba(30,30,60,.10);"/>
+  </div>
+  <div style="margin:44px 0 0;">
+    <div style="font-size:13px;font-weight:700;color:#017E84;letter-spacing:1px;text-transform:uppercase;">Feature 12</div>
+    <h3 style="font-size:23px;font-weight:700;margin:4px 0 8px;">Report on selected orders</h3>
+    <p style="font-size:15px;line-height:1.6;color:#555;margin:0 0 14px;">Select orders in the list, then <b>Action &rsaquo; Margin Report</b>. The wizard opens with those orders, no date limits and quotations included. The action is only offered to the Sales Margin Analytics group.</p>
+    <img src="sma_14_action_menu.png" alt="Action menu with Margin Report" style="width:100%;border:1px solid #e1e1e6;border-radius:10px;box-shadow:0 6px 24px rgba(30,30,60,.10);"/>
+  </div>
+  <div style="margin:44px 0 0;">
+    <div style="font-size:13px;font-weight:700;color:#017E84;letter-spacing:1px;text-transform:uppercase;">Feature 13</div>
+    <h3 style="font-size:23px;font-weight:700;margin:4px 0 8px;">Modern PDF report</h3>
+    <p style="font-size:15px;line-height:1.6;color:#555;margin:0 0 14px;">A4 landscape. <b>KPI cards</b> (revenue, cost, margin, margin rate, volume), a <b>margin-health bar</b> showing the share of revenue per band, a <b>ranking</b> by the chosen grouping with contribution bars, then <b>grouped line details</b> with coloured margin pills, subtotals, a <b>grand-total band</b> and &ldquo;Page X of Y&rdquo;. Lines costed from valuation are labelled.</p>
+    <img src="sma_15_pdf_summary.png" alt="PDF report summary page" style="width:100%;border:1px solid #e1e1e6;border-radius:10px;box-shadow:0 6px 24px rgba(30,30,60,.10);margin-bottom:22px;"/>
+    <img src="sma_16_pdf_lines.png" alt="PDF report line details" style="width:100%;border:1px solid #e1e1e6;border-radius:10px;box-shadow:0 6px 24px rgba(30,30,60,.10);"/>
+  </div>
+  <div style="margin:44px 0 0;">
+    <div style="font-size:13px;font-weight:700;color:#017E84;letter-spacing:1px;text-transform:uppercase;">Feature 14</div>
+    <h3 style="font-size:23px;font-weight:700;margin:4px 0 8px;">Excel workbook with live formulas</h3>
+    <p style="font-size:15px;line-height:1.6;color:#555;margin:0 0 14px;">Three sheets, built without any Odoo add-on: <b>Summary</b> (KPI tiles, parameters, margin bands, ranking and a combined margin / margin % chart), <b>Report</b> (grouped like the PDF with collapsible lines and live SUBTOTAL formulas) and <b>Data</b> (one row per line, auto-filter, filter-aware totals, conditional formatting and data bars), ready for pivot tables or Power BI.</p>
+    <img src="sma_17_xlsx_summary.png" alt="Excel summary sheet" style="width:100%;border:1px solid #e1e1e6;border-radius:10px;box-shadow:0 6px 24px rgba(30,30,60,.10);margin-bottom:22px;"/>
+    <img src="sma_18_xlsx_report.png" alt="Excel report sheet" style="width:100%;border:1px solid #e1e1e6;border-radius:10px;box-shadow:0 6px 24px rgba(30,30,60,.10);margin-bottom:22px;"/>
+    <img src="sma_19_xlsx_data.png" alt="Excel data sheet" style="width:100%;border:1px solid #e1e1e6;border-radius:10px;box-shadow:0 6px 24px rgba(30,30,60,.10);"/><div style="font-size:13px;color:#777;margin:6px 0 22px;">The Data sheet has 24 columns; only the first rows are shown here.</div>
+  </div>
+
+  <!-- ============================== BANDS ============================== -->
+  <h2 style="font-size:28px;font-weight:700;margin:52px 0 6px;color:#2b2b33;">Margin bands</h2>
+  <p style="font-size:16px;color:#555;margin:0 0 16px;">The same four bands drive the list colours, the filters, the PDF health bar and the Excel conditional formatting.</p>
+  <div style="font-size:15px;line-height:1.6;color:#555;margin:0 0 18px;">
+    <div style="margin-bottom:6px;"><span style="display:inline-block;min-width:150px;text-align:center;background:#fee2e2;color:#b91c1c;border-radius:10px;padding:1px 8px;font-size:13px;margin-right:10px;">Loss-making</span> margin below 0%: the line sells under its cost</div>
+    <div style="margin-bottom:6px;"><span style="display:inline-block;min-width:150px;text-align:center;background:#fef3c7;color:#b45309;border-radius:10px;padding:1px 8px;font-size:13px;margin-right:10px;">Low</span> from 0% to under 10%: thin, easily wiped out by a discount</div>
+    <div style="margin-bottom:6px;"><span style="display:inline-block;min-width:150px;text-align:center;background:#dbeafe;color:#1d4ed8;border-radius:10px;padding:1px 8px;font-size:13px;margin-right:10px;">Standard</span> from 10% to under 30%: the normal range</div>
+    <div><span style="display:inline-block;min-width:150px;text-align:center;background:#d1fae5;color:#047857;border-radius:10px;padding:1px 8px;font-size:13px;margin-right:10px;">High</span> 30% and above: strong lines worth protecting</div>
+  </div>
+  <div style="background:#f4fbfb;border-left:4px solid #017E84;border-radius:8px;padding:16px 20px;font-size:15px;line-height:1.6;">
+    <b>Margin = untaxed subtotal &minus; cost</b> &nbsp;&middot;&nbsp; <b>Margin % = margin &divide; untaxed subtotal &times; 100</b><br/>
+    Grouped ratios are recomputed from totals: <b>group margin % = &Sigma; margin &divide; &Sigma; revenue</b>.
+    Example: a 40% line of $&nbsp;1,000 and a 10% line of $&nbsp;3,000 give <b>17.5%</b> together, not 25%.
+  </div>
+
+  <!-- ============================== CORNER CASES ============================== -->
+  <h2 style="font-size:28px;font-weight:700;margin:48px 0 14px;color:#2b2b33;">Built for real-world corner cases</h2>
+  <div style="display:flex;flex-wrap:wrap;margin:0 -8px;font-size:15px;line-height:1.55;">
+    <div style="flex:1 1 320px;margin:8px;padding:16px 18px;border:1px solid #e8e8ee;border-radius:12px;"><b>Multi-currency</b><br/><span style="color:#555;">Costs are computed in company currency and converted with the order&rsquo;s own rate, so the margin % is identical in both currencies.</span></div>
+    <div style="flex:1 1 320px;margin:8px;padding:16px 18px;border:1px solid #e8e8ee;border-radius:12px;"><b>Discounts and taxes</b><br/><span style="color:#555;">Margin uses the untaxed subtotal after discount. Tax-included prices are netted by Odoo&rsquo;s tax engine.</span></div>
+    <div style="flex:1 1 320px;margin:8px;padding:16px 18px;border:1px solid #e8e8ee;border-radius:12px;"><b>Units of measure</b><br/><span style="color:#555;">The cost follows the line&rsquo;s unit of measure, converted from the product&rsquo;s.</span></div>
+    <div style="flex:1 1 320px;margin:8px;padding:16px 18px;border:1px solid #e8e8ee;border-radius:12px;"><b>Partial deliveries</b><br/><span style="color:#555;">The delivered part is costed at the actual cost and the open part at the snapshot (Actual + Standard).</span></div>
+    <div style="flex:1 1 320px;margin:8px;padding:16px 18px;border:1px solid #e8e8ee;border-radius:12px;"><b>Returns</b><br/><span style="color:#555;">Returns create negative valuation layers, so they net out of the delivered cost automatically.</span></div>
+    <div style="flex:1 1 320px;margin:8px;padding:16px 18px;border:1px solid #e8e8ee;border-radius:12px;"><b>Frozen history</b><br/><span style="color:#555;">The standard-cost snapshot never changes by itself. Refresh it on demand for undelivered lines.</span></div>
+    <div style="flex:1 1 320px;margin:8px;padding:16px 18px;border:1px solid #e8e8ee;border-radius:12px;"><b>Zero-price lines</b><br/><span style="color:#555;">A line with no revenue shows a 0% margin instead of a division error.</span></div>
+    <div style="flex:1 1 320px;margin:8px;padding:16px 18px;border:1px solid #e8e8ee;border-radius:12px;"><b>Large databases</b><br/><span style="color:#555;">Costs are stored and computed in batches with a single aggregated query on valuation layers, never line by line.</span></div>
+    <div style="flex:1 1 320px;margin:8px;padding:16px 18px;border:1px solid #e8e8ee;border-radius:12px;"><b>Kit products</b><br/><span style="color:#555;">Keep the Standard basis for kits (component moves would mix quantities in valuation mode).</span></div>
+  </div>
+
+  <!-- ============================== SECURITY ============================== -->
+  <h2 style="font-size:28px;font-weight:700;margin:48px 0 14px;color:#2b2b33;">Security</h2>
+  <table style="width:100%;border-collapse:collapse;font-size:15px;">
+    <thead><tr style="background:#714B67;color:#fff;"><th style="text-align:left;padding:10px 14px;">Who</th><th style="text-align:left;padding:10px 14px;">Sees</th></tr></thead>
+    <tbody>
+<tr style="border-bottom:1px solid #eee;"><td style="padding:10px 14px;"><b>Sales Margin Analytics</b> group</td><td style="padding:10px 14px;">The margin menus, cost and margin columns on orders, the analysis model and the report wizard. Included automatically for <b>Sales / Administrator</b>.</td></tr><tr style="border-bottom:1px solid #eee;background:#fafafa;"><td style="padding:10px 14px;">Sales <b>User: Own Documents Only</b></td><td style="padding:10px 14px;">Only their own and unassigned orders in the analysis.</td></tr><tr style="border-bottom:1px solid #eee;"><td style="padding:10px 14px;">Sales <b>User: All Documents</b> and managers</td><td style="padding:10px 14px;">Every order of the allowed companies.</td></tr><tr style="border-bottom:1px solid #eee;background:#fafafa;"><td style="padding:10px 14px;">Multi-company</td><td style="padding:10px 14px;">A global record rule limits the analysis to the user&rsquo;s companies, and the wizard refuses orders from another company.</td></tr>
+    </tbody>
+  </table>
+
+  <!-- ============================== TECHNICAL ============================== -->
+  <h2 style="font-size:28px;font-weight:700;margin:48px 0 14px;color:#2b2b33;">Technical details</h2>
+  <table style="width:100%;border-collapse:collapse;font-size:15px;">
+    <tbody>
+<tr style="border-bottom:1px solid #eee;"><td style="padding:10px 14px;width:240px;color:#777;">Odoo version</td><td style="padding:10px 14px;">16.0, Community and Enterprise</td></tr><tr style="border-bottom:1px solid #eee;background:#fafafa;"><td style="padding:10px 14px;width:240px;color:#777;">Depends on</td><td style="padding:10px 14px;"><code>sale_management</code>, <code>sale_stock</code>, <code>stock_account</code></td></tr><tr style="border-bottom:1px solid #eee;"><td style="padding:10px 14px;width:240px;color:#777;">Python dependency</td><td style="padding:10px 14px;"><code>xlsxwriter</code> (for the Excel export)</td></tr><tr style="border-bottom:1px solid #eee;background:#fafafa;"><td style="padding:10px 14px;width:240px;color:#777;">Menus</td><td style="padding:10px 14px;">Sales &rsaquo; Reporting &rsaquo; Margin Analytics &rsaquo; Margin Analysis / Margin Report (PDF / Excel)</td></tr><tr style="border-bottom:1px solid #eee;"><td style="padding:10px 14px;width:240px;color:#777;">Settings</td><td style="padding:10px 14px;">Sales &rsaquo; Settings &rsaquo; Margin Analytics &rsaquo; Margin Cost Basis</td></tr><tr style="border-bottom:1px solid #eee;background:#fafafa;"><td style="padding:10px 14px;width:240px;color:#777;">Models</td><td style="padding:10px 14px;"><code>sale.margin.report</code> (read-only SQL model), <code>sale.margin.report.wizard</code>. New fields on orders and lines are prefixed <code>sma_</code>.</td></tr><tr style="border-bottom:1px solid #eee;"><td style="padding:10px 14px;width:240px;color:#777;">Automated tests</td><td style="padding:10px 14px;">29 tests: full and partial deliveries (standard and valuation), discounts, odd precision, tax excluded and included, multi-currency, units of measure, zero price, snapshot freezing, weighted pivot ratios, record rules, thresholds, PDF and Excel rendering</td></tr><tr style="border-bottom:1px solid #eee;background:#fafafa;"><td style="padding:10px 14px;width:240px;color:#777;">License</td><td style="padding:10px 14px;">LGPL-3</td></tr>
+    </tbody>
+  </table>
+
+  <!-- ============================== CONTACT ============================== -->
+  <div style="margin:52px 0 40px;background:linear-gradient(120deg,#714B67 0%,#017E84 100%);border-radius:18px;padding:36px 40px;color:#fff;">
+    <h2 style="font-size:26px;font-weight:700;margin:0 0 8px;color:#fff;">Support &amp; customization</h2>
+    <p style="font-size:16px;line-height:1.6;margin:0 0 20px;color:#fff;opacity:.95;">Questions, a demo, or a margin report adapted to your own process? Get in touch.</p>
+    <a href="mailto:ibrahim.yahiah@gmail.com" style="display:inline-block;background:#fff;color:#714B67;font-weight:700;text-decoration:none;border-radius:8px;padding:12px 22px;margin:0 12px 10px 0;">&#9993;&nbsp; ibrahim.yahiah@gmail.com</a>
+    <a href="https://www.linkedin.com/in/ibrahim-yahia" target="_blank" rel="noopener" style="display:inline-block;border:2px solid #fff;color:#fff;font-weight:700;text-decoration:none;border-radius:8px;padding:10px 22px;margin:0 0 10px 0;">LinkedIn: Ibrahim Yahia</a>
+    <p style="font-size:13px;margin:14px 0 0;opacity:.8;color:#fff;">Author: Ibrahim Yahia &middot; License: LGPL-3</p>
+  </div>
+
+</section>

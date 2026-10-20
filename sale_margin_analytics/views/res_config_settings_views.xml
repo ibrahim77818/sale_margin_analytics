@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="res_config_settings_view_form_inherit_sma" model="ir.ui.view">
+        <field name="name">res.config.settings.view.form.inherit.sale_margin_analytics</field>
+        <field name="model">res.config.settings</field>
+        <field name="inherit_id" ref="sale.res_config_settings_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//div[@data-key='sale_management']" position="inside">
+                <h2>Margin Analytics</h2>
+                <div class="row mt16 o_settings_container" name="sma_settings_container">
+                    <div class="col-12 col-lg-6 o_setting_box" id="sma_cost_method_setting">
+                        <div class="o_setting_right_pane">
+                            <label for="sma_cost_method"/>
+                            <div class="text-muted">
+                                Which cost is used to compute sales margins for this company.
+                            </div>
+                            <div class="content-group">
+                                <div class="mt16">
+                                    <field name="sma_cost_method" widget="radio" class="o_light_label"/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </xpath>
+        </field>
+    </record>
+</odoo>

@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_order_form_inherit_sma" model="ir.ui.view">
+        <field name="name">sale.order.form.inherit.sale_margin_analytics</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='order_line']/tree/field[@name='price_subtotal']" position="after">
+                <field name="sma_cost_unit" optional="show"
+                       groups="sale_margin_analytics.group_margin_analyst"
+                       attrs="{'invisible': [('display_type', '!=', False)]}"/>
+                <field name="sma_cost_total" optional="hide" widget="monetary"
+                       groups="sale_margin_analytics.group_margin_analyst"
+                       attrs="{'invisible': [('display_type', '!=', False)]}"/>
+                <field name="sma_margin" optional="show" widget="monetary"
+                       groups="sale_margin_analytics.group_margin_analyst"
+                       attrs="{'invisible': [('display_type', '!=', False)]}"/>
+                <field name="sma_margin_percent" optional="show"
+                       groups="sale_margin_analytics.group_margin_analyst"
+                       decoration-danger="sma_margin_percent &lt; 0"
+                       decoration-success="sma_margin_percent &gt;= 30"
+                       attrs="{'invisible': [('display_type', '!=', False)]}"/>
+                <field name="sma_cost_source" optional="hide"
+                       groups="sale_margin_analytics.group_margin_analyst"/>
+            </xpath>
+            <xpath expr="//notebook" position="inside">
+                <page string="Profitability" name="sma_profitability"
+                      groups="sale_margin_analytics.group_margin_analyst">
+                    <group>
+                        <group>
+                            <field name="amount_untaxed" string="Revenue (Untaxed)"/>
+                            <field name="sma_amount_cost"/>
+                            <field name="sma_margin"/>
+                            <field name="sma_margin_percent"/>
+                        </group>
+                        <group>
+                            <div class="text-muted" colspan="2">
+                                Margins are computed on untaxed amounts after discounts.
+                                Cost basis is set per company in Sales settings.
+                            </div>
+                            <button name="action_sma_refresh_costs" type="object"
+                                    string="Refresh Standard Costs" icon="fa-refresh"
+                                    class="btn-secondary" colspan="2"
+                                    attrs="{'invisible': [('state', 'in', ('done', 'cancel'))]}"/>
+                        </group>
+                    </group>
+                </page>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_order_tree_inherit_sma" model="ir.ui.view">
+        <field name="name">sale.order.tree.inherit.sale_margin_analytics</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_tree"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='amount_total']" position="after">
+                <field name="sma_margin" optional="hide" sum="Total Margin" widget="monetary"
+                       groups="sale_margin_analytics.group_margin_analyst"/>
+                <field name="sma_margin_percent" optional="hide"
+                       groups="sale_margin_analytics.group_margin_analyst"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>
