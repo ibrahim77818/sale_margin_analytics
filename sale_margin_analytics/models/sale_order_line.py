@@ -57,7 +57,7 @@ class SaleOrderLine(models.Model):
         string='Margin', currency_field='currency_id',
         compute='_compute_sma_costs', store=True)
     sma_margin_percent = fields.Float(
-        string='Margin (%)', digits=(16, 2), group_operator='avg',
+        string='Margin (%)', digits=(16, 2), aggregator='avg',
         compute='_compute_sma_costs', store=True,
         help="Margin / untaxed subtotal (after discount) x 100.")
     sma_cost_source = fields.Selection(
@@ -145,7 +145,7 @@ class SaleOrderLine(models.Model):
         Three queries per batch regardless of its size."""
         lines = self.filtered(
             lambda l: l.company_id.sma_cost_method == 'valuation'
-            and l.product_id.type == 'product')
+            and l.product_id.is_storable)
         line_ids = [line_id for line_id in lines._origin.ids if line_id]
         if not line_ids:
             return {}

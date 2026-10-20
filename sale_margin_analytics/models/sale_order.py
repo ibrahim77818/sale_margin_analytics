@@ -10,7 +10,7 @@ class SaleOrder(models.Model):
     sma_margin = fields.Monetary(
         string='Margin', compute='_compute_sma_totals', store=True)
     sma_margin_percent = fields.Float(
-        string='Margin (%)', digits=(16, 2), group_operator='avg',
+        string='Margin (%)', digits=(16, 2), aggregator='avg',
         compute='_compute_sma_totals', store=True,
         help="Weighted order margin: total margin / total untaxed revenue x 100.")
 

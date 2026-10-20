@@ -129,7 +129,7 @@ class SaleMarginReportWizard(models.TransientModel):
             raise UserError(_("All selected sales orders must belong to %s.", self.company_id.name))
         domain = [('company_id', '=', self.company_id.id)]
         if self.state_scope == 'confirmed':
-            domain.append(('state', 'in', ('sale', 'done')))
+            domain.append(('state', '=', 'sale'))
         if self.date_from:
             domain.append(('date', '>=', self._to_utc(self.date_from, time.min)))
         if self.date_to:
@@ -382,8 +382,8 @@ class SaleMarginReportWizard(models.TransientModel):
             'type': 'ir.actions.act_window',
             'name': _('Margin Analysis'),
             'res_model': 'sale.margin.report',
-            'view_mode': 'pivot,graph,tree',
-            'views': [(False, 'pivot'), (False, 'graph'), (False, 'tree')],
+            'view_mode': 'pivot,graph,list',
+            'views': [(False, 'pivot'), (False, 'graph'), (False, 'list')],
             'search_view_id': [self.env.ref('sale_margin_analytics.sale_margin_report_view_search').id],
             'domain': self._get_effective_domain(),
             'context': {

@@ -6,7 +6,6 @@ STATE_SELECTION = [
     ('draft', 'Quotation'),
     ('sent', 'Quotation Sent'),
     ('sale', 'Sales Order'),
-    ('done', 'Locked'),
     ('cancel', 'Cancelled'),
 ]
 
@@ -65,14 +64,14 @@ class SaleMarginReport(models.Model):
     product_qty = fields.Float('Qty Ordered (Product UoM)', readonly=True)
 
     # --- Unit figures (weighted in read_group) -------------------------------
-    discount = fields.Float('Discount (%)', digits=(16, 2), group_operator='avg', readonly=True)
+    discount = fields.Float('Discount (%)', digits=(16, 2), aggregator='avg', readonly=True)
     price_unit = fields.Float('Unit Price (excl. tax)', digits='Product Price',
-                              group_operator='avg', readonly=True)
+                              aggregator='avg', readonly=True)
     price_unit_net = fields.Float('Net Unit Price', digits='Product Price',
-                                  group_operator='avg', readonly=True,
+                                  aggregator='avg', readonly=True,
                                   help="Unit price after discount, excluding taxes.")
     cost_unit = fields.Float('Unit Cost', digits='Product Price',
-                             group_operator='avg', readonly=True)
+                             aggregator='avg', readonly=True)
 
     # --- Amounts (company currency) ------------------------------------------
     gross_amount = fields.Monetary('Gross Amount', readonly=True,
@@ -83,13 +82,13 @@ class SaleMarginReport(models.Model):
     price_total = fields.Monetary('Total (Tax Incl.)', readonly=True)
     cost_total = fields.Monetary('Total Cost', readonly=True)
     margin = fields.Monetary('Margin', readonly=True)
-    margin_percent = fields.Float('Margin (%)', digits=(16, 2), group_operator='avg',
+    margin_percent = fields.Float('Margin (%)', digits=(16, 2), aggregator='avg',
                                   readonly=True)
     delivered_amount = fields.Monetary('Delivered Revenue', readonly=True)
     delivered_cost = fields.Monetary('Delivered Cost', readonly=True)
     delivered_margin = fields.Monetary('Delivered Margin', readonly=True)
     delivered_margin_percent = fields.Float('Delivered Margin (%)', digits=(16, 2),
-                                            group_operator='avg', readonly=True)
+                                            aggregator='avg', readonly=True)
 
     # ------------------------------------------------------------------------
     @property
