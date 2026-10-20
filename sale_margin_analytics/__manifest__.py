@@ -1,6 +1,6 @@
 {
     'name': 'Sales Margin & Profitability Analytics',
-    'version': '18.0.1.0.0',
+    'version': '18.0.1.0.1',
     'category': 'Sales/Sales',
     'summary': 'Line-level cost, margin and profitability analytics with pivot, '
                'graph, modern PDF and Excel reporting',
