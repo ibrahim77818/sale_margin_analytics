@@ -35,6 +35,7 @@ Sales Margin & Profitability Analytics
             'sale_margin_analytics/static/src/scss/margin_report.scss',
         ],
     },
+    'images': ['static/description/banner.png'],
     'installable': True,
     'application': False,
 }
