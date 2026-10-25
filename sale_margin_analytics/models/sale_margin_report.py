@@ -6,7 +6,6 @@ STATE_SELECTION = [
     ('draft', 'Quotation'),
     ('sent', 'Quotation Sent'),
     ('sale', 'Sales Order'),
-    ('done', 'Locked'),
     ('cancel', 'Cancelled'),
 ]
 

@@ -74,7 +74,7 @@
                 <field name="user_id"/>
                 <field name="team_id"/>
                 <filter name="confirmed" string="Sales Orders"
-                        domain="[('state', 'in', ('sale', 'done'))]"/>
+                        domain="[('state', '=', 'sale')]"/>
                 <filter name="quotations" string="Quotations"
                         domain="[('state', 'in', ('draft', 'sent'))]"/>
                 <separator/>
