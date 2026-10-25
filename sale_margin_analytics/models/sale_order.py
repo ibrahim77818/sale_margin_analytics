@@ -24,8 +24,11 @@ class SaleOrder(models.Model):
             margin = sum(lines.mapped('sma_margin'))
             order.sma_amount_cost = sum(lines.mapped('sma_cost_total'))
             order.sma_margin = margin
+            # A new order has no currency until its pricelist is set.
+            currency = (order.currency_id or order.company_id.currency_id
+                        or self.env.company.currency_id)
             order.sma_margin_percent = (
-                margin / revenue * 100.0 if not order.currency_id.is_zero(revenue) else 0.0)
+                margin / revenue * 100.0 if not currency.is_zero(revenue) else 0.0)
 
     def action_sma_refresh_costs(self):
         """Re-capture the standard-cost snapshot of lines not delivered yet."""
