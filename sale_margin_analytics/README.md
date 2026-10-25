@@ -1,4 +1,4 @@
-# Sales Margin & Profitability Analytics (`sale_margin_analytics`) — Odoo 17
+# Sales Margin & Profitability Analytics (`sale_margin_analytics`) — Odoo 16
 
 ## Architecture
 
@@ -73,13 +73,3 @@ excluded lines, record rules, thresholds, payload totals per grouping, Excel and
 * Changing the company cost basis recomputes the stored cost fields of that company's lines
   (expected, can take a while on very large databases).
 * Margin band thresholds (0 / 10 / 30 %) are constants in the wizard (`margin_band`).
-
-## Porting notes 16.0 → 17.0
-* `attrs` replaced by inline `invisible="…"` expressions (order lines, Profitability tab, wizard).
-* `sale.order` no longer has the `done` state (locking is the boolean `locked`): removed from the
-  report's status selection; "confirmed" filters now use `state = 'sale'`; the refresh button hides on
-  `state == 'cancel' or locked`.
-* Settings page rewritten for the v17 `<app>` / `<block>` / `<setting>` layout.
-* Tests: `stock.move.quantity_done` → `quantity` + `picked`; taxes created with a `country_id`.
-* Unchanged on purpose: `<tree>` views (renamed `<list>` only in 18.0), `group_operator`
-  (renamed `aggregator` in 18.0), `detailed_type`, `product_uom`, `tax_id`, `stock.valuation.layer`.

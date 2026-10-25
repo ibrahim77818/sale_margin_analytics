@@ -129,7 +129,7 @@ class SaleMarginReportWizard(models.TransientModel):
             raise UserError(_("All selected sales orders must belong to %s.", self.company_id.name))
         domain = [('company_id', '=', self.company_id.id)]
         if self.state_scope == 'confirmed':
-            domain.append(('state', '=', 'sale'))
+            domain.append(('state', 'in', ('sale', 'done')))
         if self.date_from:
             domain.append(('date', '>=', self._to_utc(self.date_from, time.min)))
         if self.date_to:
