@@ -154,3 +154,9 @@ class TestMarginComputation(SaleMarginCommon):
         self.assertEqual(set(sections.mapped('sma_margin')), {0.0})
         self.assertEqual(set(sections.mapped('sma_cost_source')), {'none'})
         self.assertAlmostEqual(order.sma_margin, 40.0, places=2)
+
+    def test_14_new_order_without_currency(self):
+        """A brand-new order (no pricelist yet, so no currency) must not crash."""
+        order = self.env['sale.order'].new({})
+        self.assertEqual(order.sma_margin_percent, 0.0)
+        self.assertEqual(order.sma_margin, 0.0)
